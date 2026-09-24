@@ -1,0 +1,11 @@
+.env.local
+.env.*.local
+node_modules/
+.next/
+*.tsbuildinfo
+.npm-cache/
+.ngrok-bin/
+.ngrok-windows.zip
+.codex/
+.agents/
+.impeccable/
