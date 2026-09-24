@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   description:
     "Obsidx partners with established creators to build digital products and sustainable revenue streams.",
   metadataBase: new URL("https://obsidx.com"),
+  icons: {
+    icon: "/assets/obsidx-gold-logo.png",
+  },
   openGraph: {
     title: "Your audience is ready. Build what comes next.",
     description:
