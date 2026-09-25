@@ -7,16 +7,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const options = useMemo(() => ({
     autoRaf: true,
-    // Consulting.com-style response: decisive travel with a short, eased settle.
-    lerp: 0.2,
+    // Gentle desktop interpolation; touch remains native for direct, platform-consistent control.
+    lerp: 0.12,
     smoothWheel: true,
-    wheelMultiplier: 1.5,
-    syncTouch: true,
-    touchMultiplier: 1,
-    syncTouchLerp: 0.055,
-    touchInertiaExponent: 1.35,
+    wheelMultiplier: 0.85,
+    syncTouch: false,
     allowNestedScroll: true,
-    anchors: { offset: -88 },
+    anchors: { offset: -88, lerp: 0, duration: 0.55, easing: (time: number) => 1 - Math.pow(1 - time, 4) },
   }), []);
 
   useEffect(() => {

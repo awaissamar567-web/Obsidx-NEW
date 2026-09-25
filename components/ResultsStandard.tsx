@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 import { ResponsiveCopy } from "@/components/ResponsiveCopy";
 
@@ -11,8 +11,6 @@ type ResultCard = {
   visual: ReactNode;
   shape: "square" | "wide" | "tall";
 };
-
-const spring = { stiffness: 190, damping: 22, mass: 0.7 };
 
 function OfferFitVisual() {
   const aligned = [
@@ -181,34 +179,19 @@ const mobileBodies = [
 ];
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 34 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.62, ease: [0.16, 1, 0.3, 1] as const } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.54, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 function InteractiveCard({ card, index }: { card: ResultCard; index: number }) {
   const reduceMotion = useReducedMotion();
-  const rotateXValue = useMotionValue(0);
-  const rotateYValue = useMotionValue(0);
-  const rotateX = useSpring(rotateXValue, spring);
-  const rotateY = useSpring(rotateYValue, spring);
-
   return (
     <motion.article
-      variants={cardVariants}
-      onPointerMove={(event) => {
-        if (reduceMotion || event.pointerType === "touch") return;
-        const rect = event.currentTarget.getBoundingClientRect();
-        const pointerX = (event.clientX - rect.left) / rect.width;
-        const pointerY = (event.clientY - rect.top) / rect.height;
-        rotateYValue.set((pointerX - 0.5) * 6);
-        rotateXValue.set(-(pointerY - 0.5) * 6);
-      }}
-      onPointerLeave={() => {
-        rotateXValue.set(0);
-        rotateYValue.set(0);
-      }}
-      style={{ rotateX, rotateY, transformPerspective: 900, transformStyle: "preserve-3d" }}
-      className={`result-card result-card--${card.shape} group relative min-h-[300px] overflow-hidden rounded-2xl border border-[#FCBA4B]/35 bg-[radial-gradient(circle_at_85%_12%,rgba(252,186,75,0.18),transparent_36%),rgba(24,21,15,0.82)] p-6 shadow-[0_18px_65px_rgba(252,186,75,0.10),inset_0_1px_0_rgba(255,255,255,0.10)] backdrop-blur-xl transition-[border-color,box-shadow,background-color] duration-500 hover:border-[#FCBA4B]/55 hover:shadow-[0_22px_70px_rgba(252,186,75,0.14),inset_0_1px_0_rgba(255,255,255,0.10)] sm:p-7`}
+      variants={reduceMotion ? { hidden: { opacity: 1 }, visible: { opacity: 1 } } : cardVariants}
+      whileHover={reduceMotion ? undefined : { scale: 1.02, y: -2 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.99 }}
+      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      className={`result-card result-card--${card.shape} group relative min-h-[300px] overflow-hidden rounded-2xl border border-[#FCBA4B]/35 bg-[radial-gradient(circle_at_85%_12%,rgba(252,186,75,0.18),transparent_36%),rgba(24,21,15,0.82)] p-6 shadow-[0_18px_65px_rgba(252,186,75,0.10),inset_0_1px_0_rgba(255,255,255,0.10)] backdrop-blur-xl transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#FCBA4B]/55 hover:shadow-[0_22px_70px_rgba(252,186,75,0.14),inset_0_1px_0_rgba(255,255,255,0.10)] sm:p-7`}
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.055),transparent_38%)] opacity-70" />
       <div className="result-card-inner relative flex h-full min-h-[250px] flex-col" style={{ transform: "translateZ(18px)" }}>
@@ -229,6 +212,7 @@ function InteractiveCard({ card, index }: { card: ResultCard; index: number }) {
 }
 
 export function ResultsStandard() {
+  const reduceMotion = useReducedMotion();
   return (
     <section className="results section-shell relative overflow-hidden" id="what-we-build">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-40" style={{ backgroundImage: "radial-gradient(circle at 90% 8%, rgba(252,186,75,.13), transparent 22rem), radial-gradient(circle at 8% 88%, rgba(252,186,75,.08), transparent 24rem), linear-gradient(rgba(252,186,75,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(252,186,75,.035) 1px, transparent 1px)", backgroundSize: "auto, auto, 72px 72px, 72px 72px", maskImage: "linear-gradient(to bottom, transparent, black 14%, black 86%, transparent)" }} />
@@ -240,9 +224,9 @@ export function ResultsStandard() {
 
       <motion.div
         variants={containerVariants}
-        initial={false}
+        initial={reduceMotion ? false : "hidden"}
         whileInView="visible"
-        viewport={{ once: true, amount: 0.12 }}
+        viewport={{ once: true, margin: "0px 0px -80px 0px" }}
         className="results-card-grid relative grid gap-4"
       >
         {cards.map((card, index) => <InteractiveCard card={card} index={index} key={card.title} />)}

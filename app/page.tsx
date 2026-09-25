@@ -2,6 +2,7 @@ import { BrandLogo } from "@/components/BrandLogo";
 import { Header } from "@/components/Header";
 import { ResultsStandard } from "@/components/ResultsStandard";
 import { GrowthSignals } from "@/components/GrowthSignals";
+import { HeroEntrance, ScrollReveal } from "@/components/Motion";
 
 const operatingSteps = [
   {
@@ -28,15 +29,15 @@ export default function Home() {
       <Header />
 
       <section className="hero section-shell" id="home">
-        <div className="hero-copy">
+        <HeroEntrance className="hero-copy">
           <h1>Your Audience Is Already Paying Attention. Build Something They Can Own With You.</h1>
           <p className="hero-subhead">
             Obsidx partners with established creators to turn audience trust into digital products and sustainable revenue streams.
           </p>
           <p className="hero-trust-line">Estd. 2022 <span aria-hidden="true">|</span> 7 figures generated</p>
           <a className="button hero-button" href="/apply">Apply to Work With Obsidx</a>
-        </div>
-        <GrowthSignals />
+        </HeroEntrance>
+        <HeroEntrance><GrowthSignals /></HeroEntrance>
       </section>
 
       <section className="trust-rail" aria-label="Products Obsidx builds">
@@ -60,13 +61,13 @@ export default function Home() {
       </section>
 
       <section className="about opportunity section-shell" id="opportunity">
-        <div className="about-statement">
+        <ScrollReveal className="about-statement">
           <h2>You’ve Built the Audience. Now Build the Business Behind It.</h2>
           <p>Your audience already knows your voice, values your perspective, and trusts your recommendations.</p>
           <p>Obsidx identifies what your audience genuinely wants, shapes it into the right offer, and builds the systems needed to sell and deliver it consistently.</p>
-        </div>
+        </ScrollReveal>
 
-        <div className="operator-model">
+        <ScrollReveal className="operator-model">
           <div className="operator-stage">
             <span className="stage-label">You bring</span>
             <strong>Your audience.<br />Your expertise.<br />Your brand.</strong>
@@ -76,17 +77,17 @@ export default function Home() {
             <span className="stage-label">Obsidx brings</span>
             <strong>Strategy.<br />Systems.<br />Execution.</strong>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <ResultsStandard />
 
       <section className="about section-shell" id="how-it-works">
-        <div className="about-statement">
+        <ScrollReveal className="about-statement">
           <h2>From Audience Insight to a Business That Keeps Improving</h2>
-        </div>
+        </ScrollReveal>
 
-        <div className="operating-list process-list">
+        <ScrollReveal className="operating-list process-list">
           {operatingSteps.map((step) => (
             <article key={step.title}>
               <div>
@@ -95,27 +96,27 @@ export default function Home() {
               </div>
             </article>
           ))}
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="about standard-section section-shell" id="about">
-        <div className="about-statement">
+        <ScrollReveal className="about-statement">
           <h2>Clarity Creates Visible, Accountable Growth.</h2>
           <p>Your creator business should never depend on guesswork.</p>
           <p>You should understand what is being built, why it matters, how it performs, and what needs to happen next.</p>
           <p>Every Obsidx partnership is built around measurable demand, transparent performance, and decisions made together.</p>
-        </div>
-        <blockquote>
+        </ScrollReveal>
+        <ScrollReveal><blockquote>
           “The strongest creator businesses are built on clear decisions, shared accountability, and systems that keep improving.”
-        </blockquote>
+        </blockquote></ScrollReveal>
       </section>
 
       <section className="apply section-shell" id="apply">
-        <div className="apply-copy">
+        <ScrollReveal className="apply-copy">
           <h2>You Built the Trust. Now Build What Comes Next.</h2>
           <p>Obsidx works with a limited number of established creators ready to build a serious, owned revenue stream.</p>
           <a className="button final-apply-button" href="/apply">Apply to Work With Obsidx</a>
-        </div>
+        </ScrollReveal>
       </section>
 
       <footer className="footer">

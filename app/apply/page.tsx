@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ApplicationForm } from "@/components/ApplicationForm";
 import { BrandLogo } from "@/components/BrandLogo";
+import { HeroEntrance } from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "Apply | Obsidx",
@@ -16,10 +17,10 @@ export default function ApplyPage() {
       </header>
 
       <section className="application-shell">
-        <div className="application-context">
+        <HeroEntrance className="application-context">
           <h1>Let&apos;s see if there&apos;s a fit.</h1>
           <p>Seven focused questions. One clear step at a time.</p>
-        </div>
+        </HeroEntrance>
         <ApplicationForm />
       </section>
     </main>

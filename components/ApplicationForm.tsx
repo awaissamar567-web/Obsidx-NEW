@@ -177,8 +177,8 @@ export function ApplicationForm() {
       content: <ObsidxSelect autoFocus label="Primary social media platform" placeholder="Choose your primary platform" value={data.platform} options={platformOptions} onChange={(value) => update("platform", value)} />,
     },
     {
-      title: "Where is most of your audience located?",
-      content: <input autoFocus aria-label="Main audience location" placeholder="Main audience location" name="audienceLocation" required value={data.audienceLocation} onChange={(event) => update("audienceLocation", event.target.value)} />,
+      title: "What's your Instagram or TikTok @?",
+      content: <input autoFocus aria-label="Instagram or TikTok handle" placeholder="@yourhandle" name="audienceLocation" required value={data.audienceLocation} onChange={(event) => update("audienceLocation", event.target.value)} />,
     },
     {
       title: "How many followers do you have?",
