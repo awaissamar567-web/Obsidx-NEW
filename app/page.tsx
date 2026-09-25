@@ -107,7 +107,7 @@ export default function Home() {
           <p>Every Obsidx partnership is built around measurable demand, transparent performance, and decisions made together.</p>
         </ScrollReveal>
         <ScrollReveal><blockquote>
-          “The strongest creator businesses are built on clear decisions, shared accountability, and systems that keep improving.”
+          “Attention is the new oil. But oil is worthless if you don't have a refinery. We build the refinery.”
         </blockquote></ScrollReveal>
       </section>
 
