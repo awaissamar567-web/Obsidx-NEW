@@ -1,7 +1,6 @@
 import { BrandLogo } from "@/components/BrandLogo";
 import { Header } from "@/components/Header";
 import { ResultsStandard } from "@/components/ResultsStandard";
-import { GrowthSignals } from "@/components/GrowthSignals";
 import { HeroEntrance, ScrollReveal } from "@/components/Motion";
 
 const operatingSteps = [
@@ -37,8 +36,12 @@ export default function Home() {
           <p className="hero-trust-line">Estd. 2022 <span aria-hidden="true">|</span> 7 figures generated</p>
           <a className="button hero-button" href="/apply">Apply to Work With Obsidx</a>
         </HeroEntrance>
-        <HeroEntrance><GrowthSignals /></HeroEntrance>
       </section>
+
+      <aside className="application-cap" aria-label="Application availability">
+        <span><strong>20</strong><span aria-hidden="true">/</span><strong>25</strong> Members</span>
+        <a href="/apply">Apply Now</a>
+      </aside>
 
       <section className="trust-rail" aria-label="Products Obsidx builds">
         <div className="trust-marquee" tabIndex={0} aria-label="Products Obsidx builds. Hover or focus to pause the moving message.">
