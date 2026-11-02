@@ -1,7 +1,8 @@
-import { BrandLogo } from "@/components/BrandLogo";
 import { Header } from "@/components/Header";
 import { ResultsStandard } from "@/components/ResultsStandard";
 import { HeroEntrance, ScrollReveal } from "@/components/Motion";
+import { ProductFlow } from "@/components/ProductFlow";
+import { ToolsMarquee } from "@/components/ToolsMarquee";
 
 const operatingSteps = [
   {
@@ -22,6 +23,14 @@ const operatingSteps = [
   },
 ] as const;
 
+// TODO: replace with the real Obsidx profile URLs and inbox.
+const socialLinks = [
+  { label: "Instagram", href: "https://www.instagram.com/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/" },
+  { label: "Twitter", href: "https://twitter.com/" },
+] as const;
+const contactEmail = "hello@obsidx.com";
+
 export default function Home() {
   return (
     <main>
@@ -30,10 +39,6 @@ export default function Home() {
       <section className="hero section-shell" id="home">
         <HeroEntrance className="hero-copy">
           <h1>Your Audience Is Already Paying Attention. Build Something They Can Own With You.</h1>
-          <p className="hero-subhead">
-            Obsidx partners with established creators to turn audience trust into digital products and sustainable revenue streams.
-          </p>
-          <p className="hero-trust-line">Estd. 2022 <span aria-hidden="true">|</span> 7 figures generated</p>
           <a className="button hero-button" href="/apply">Apply to Work With Obsidx</a>
         </HeroEntrance>
       </section>
@@ -64,24 +69,13 @@ export default function Home() {
       </section>
 
       <section className="about opportunity section-shell" id="opportunity">
-        <ScrollReveal className="about-statement">
+        <ScrollReveal className="about-statement opportunity-heading">
           <h2>You’ve Built the Audience. Now Build the Business Behind It.</h2>
-          <p>Your audience already knows your voice, values your perspective, and trusts your recommendations.</p>
-          <p>Obsidx identifies what your audience genuinely wants, shapes it into the right offer, and builds the systems needed to sell and deliver it consistently.</p>
         </ScrollReveal>
-
-        <ScrollReveal className="operator-model">
-          <div className="operator-stage">
-            <span className="stage-label">You bring</span>
-            <strong>Your audience.<br />Your expertise.<br />Your brand.</strong>
-          </div>
-          <div className="operator-line" aria-hidden="true"><span /></div>
-          <div className="operator-stage operator-backstage">
-            <span className="stage-label">Obsidx brings</span>
-            <strong>Strategy.<br />Systems.<br />Execution.</strong>
-          </div>
-        </ScrollReveal>
+        <ProductFlow />
       </section>
+
+      <ToolsMarquee />
 
       <ResultsStandard />
 
@@ -122,20 +116,28 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      <footer className="footer">
-        <a className="brandmark footer-brandmark" href="#home" aria-label="Obsidx home">
-          <BrandLogo />
-          <span className="footer-wordmark">Obsidx</span>
-        </a>
-        <p>Creator businesses built with clarity.</p>
-        <div className="footer-links">
-          <a href="#home">Home</a>
-          <a href="#how-it-works">How It Works</a>
-          <a href="#what-we-build">What We Build</a>
-          <a href="#about">About</a>
-          <a href="/apply">Apply Now</a>
+      <footer className="site-footer">
+        <div className="site-footer-columns">
+          <nav aria-label="Footer navigation">
+            <h2>Navigation</h2>
+            <a href="#home">Home</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#what-we-build">What We Build</a>
+            <a href="#about">About</a>
+            <a href="/apply">Apply Now</a>
+          </nav>
+          <div>
+            <h2>Social</h2>
+            {socialLinks.map((link) => (
+              <a href={link.href} target="_blank" rel="noreferrer" key={link.label}>{link.label}</a>
+            ))}
+          </div>
+          <div>
+            <h2>Contact</h2>
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+          </div>
         </div>
-        <small>© 2026 Obsidx</small>
+        <p className="site-footer-wordmark" aria-hidden="true">Obsidx</p>
       </footer>
     </main>
   );
