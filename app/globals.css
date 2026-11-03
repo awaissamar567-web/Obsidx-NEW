@@ -370,8 +370,8 @@ h1 span {
 .results,
 .about,
 .apply {
-  padding-top: clamp(6rem, 10vw, 10rem);
-  padding-bottom: clamp(6rem, 10vw, 10rem);
+  padding-top: clamp(4rem, 6vw, 6rem);
+  padding-bottom: clamp(4rem, 6vw, 6rem);
 }
 
 .section-intro {
@@ -567,7 +567,7 @@ h1 span {
 
 blockquote {
   max-width: 970px;
-  margin: clamp(6rem, 10vw, 10rem) auto 0;
+  margin: clamp(3rem, 6vw, 5rem) auto 0;
   padding: 0;
   color: #dedad2;
   font-family: var(--serif);
@@ -2390,7 +2390,7 @@ blockquote {
   height: 500px;
   min-height: 500px;
   overflow: hidden;
-  margin: clamp(4.5rem, 8vw, 8rem) auto 93px;
+  margin: clamp(2rem, 4vw, 3.5rem) auto clamp(2.5rem, 4vw, 4rem);
   padding: 36px 89px;
   border: 0;
   border-radius: 22px;
@@ -3073,11 +3073,12 @@ blockquote {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  padding-bottom: clamp(1.5rem, 3vw, 3rem);
   border-bottom: 0;
 }
 
 .opportunity-heading {
-  margin: 0 auto clamp(2.5rem, 5vw, 4.5rem);
+  margin: 0 auto clamp(2rem, 4vw, 3.5rem);
   text-align: center;
 }
 
@@ -3100,6 +3101,11 @@ blockquote {
 
 .flow-stage--tall {
   display: none;
+}
+
+/* Trim the empty bands baked into the wide layout above the top tiles and below the bottom labels. */
+.flow-stage--wide {
+  margin-block: calc(var(--u) * -110) calc(var(--u) * -70);
 }
 
 .flow-wires {
