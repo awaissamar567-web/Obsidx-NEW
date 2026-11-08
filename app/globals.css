@@ -3420,13 +3420,13 @@ blockquote {
 .tools-track {
   display: flex;
   width: max-content;
-  animation: trust-marquee 40s linear infinite;
+  animation: trust-marquee 26s linear infinite;
 }
 
 /* Second strip runs the other way, a little slower, so the two rows drift past each other. */
 .tools-marquee--reverse .tools-track {
   animation-direction: reverse;
-  animation-duration: 46s;
+  animation-duration: 30s;
 }
 
 /* Hovering or focusing either strip pauses both. */
@@ -3444,14 +3444,17 @@ blockquote {
   list-style: none;
 }
 
-/* Equal space between every logo, sized so about five show on desktop and three on mobile. */
+/* Each logo sits centred in a fixed slot: four per strip on desktop, three on mobile. A slot of at
+   least a quarter of the strip means a five-logo list is always wider than the strip, so the same
+   logo can never be on screen twice in one strip. */
 .tools-list li {
-  --tools-gap: calc(100cqw / 5 - 4.9rem);
   display: flex;
+  width: calc(100cqw / 4);
   height: 2.4rem;
   flex: none;
   align-items: center;
-  padding-inline: calc(var(--tools-gap) / 2);
+  justify-content: center;
+  padding-inline: 0.5rem;
   opacity: 0.45;
   transition: opacity 0.25s ease;
 }
@@ -3494,7 +3497,7 @@ blockquote {
   }
 
   .tools-list li {
-    --tools-gap: calc(100cqw / 3 - 3.6rem);
+    width: calc(100cqw / 3);
     height: 2rem;
   }
 
