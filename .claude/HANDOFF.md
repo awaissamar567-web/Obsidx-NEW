@@ -2,7 +2,7 @@
 
 **Project:** `E:\obsidx new website` (Next.js). Read `AGENTS.md` first: this Next.js version has breaking changes, so check `node_modules/next/dist/docs/` before using Next APIs.
 **Run:** `npm run dev` → http://localhost:3000 (launch config `obsidx-dev` in `.claude/launch.json`).
-**Git:** all work is committed and merged into `main` (fast-forward from `homepage-redesign`, redesign commit `2222304`). `main` is **not pushed** to `origin` yet.
+**Git:** all work is committed and merged into `main` (fast-forward from `homepage-redesign`, redesign commit `2222304`). `main` is pushed to `origin` (GitHub `awaissamar567-web/Obsidx-NEW`).
 **Assets:** PNGs in `public/assets` and `New Assets icons` were losslessly recompressed (pixel-identical). The CTA background is now `public/assets/gold-liquid-cta.webp` (lossless).
 
 ## What was asked and done
@@ -33,7 +33,6 @@
 - Replace placeholders before launch: partner results (all metrics are "—"), "Who we help" categories, dashboard sample data, social URLs and email in `page.tsx`, seat count.
 - Confirm the Apple Garamond license.
 - `components/ProcessCurve.tsx` (and its CSS in `globals.css`) is unused now and can be deleted.
-- Push `main` to `origin` when the user is ready.
 - Optional size wins that are not strictly lossless: the favicon/header logo `obsidx-gold-logo.png` is 3375×3375 (1.7 MB) but shown at 54 px; the Apple Garamond TTFs could become WOFF2 (lossless, needs a converter).
 
 ## Notes for the next session

@@ -69,9 +69,15 @@
   font-style: normal;
 }
 
+/* Silver counterpart to the gold line: bright top fading to a dark bottom.
+   The tile repeats every line-height (0.86em) so a line that wraps on wide
+   screens ("Your / audience") gets the full gradient on each row. */
 .ox-hero-title .ox-line--1,
 .ox-hero-title .ox-line--2 {
-  color: var(--ink);
+  background: linear-gradient(180deg, #ffffff 0, #e4e4e4 0.34em, #8f8f8f 0.64em, #262626 0.94em) 0 0 / 100% 0.86em repeat-y;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 
