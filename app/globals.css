@@ -3377,6 +3377,9 @@ blockquote {
 
 .tools-band {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
   padding-block: calc(0.85rem + 10px);
 }
 
@@ -3420,9 +3423,15 @@ blockquote {
   animation: trust-marquee 40s linear infinite;
 }
 
-.tools-marquee:hover .tools-track,
-.tools-marquee:focus .tools-track,
-.tools-marquee:focus-within .tools-track {
+/* Second strip runs the other way, a little slower, so the two rows drift past each other. */
+.tools-marquee--reverse .tools-track {
+  animation-direction: reverse;
+  animation-duration: 46s;
+}
+
+/* Hovering or focusing either strip pauses both. */
+.tools-band:hover .tools-track,
+.tools-band:focus-within .tools-track {
   animation-play-state: paused;
 }
 
@@ -3480,6 +3489,7 @@ blockquote {
 
 @media (max-width: 760px) {
   .tools-band {
+    gap: 0.6rem;
     padding-block: calc(0.7rem + 10px);
   }
 

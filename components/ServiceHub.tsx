@@ -54,20 +54,33 @@ export function ServiceHub() {
             style={{ "--i": i } as CSSProperties}
           />
         ))}
-        {/* Pulses travel outward: each path is drawn square -> hub, so keyPoints 1 -> 0 runs it hub -> square. */}
-        {spokes.map((item, i) => (
-          <circle key={`pulse-${item.label}`} className="ox-hub-pulse" r={3}>
-            <animateMotion
-              dur="3.4s"
-              begin={`${(i * 0.37).toFixed(2)}s`}
-              repeatCount="indefinite"
-              path={item.d}
-              keyPoints="1;0"
-              keyTimes="0;1"
-              calcMode="linear"
-            />
-          </circle>
-        ))}
+        {/* Pulses travel outward: each path is drawn square -> hub, so keyPoints 1 -> 0 runs it hub -> square.
+            They fade in as they leave the hub and out as they reach the square. fill-opacity starts at 0 so a
+            pulse stays invisible until its first run begins. */}
+        {spokes.map((item, i) => {
+          const begin = `${(i * 0.37).toFixed(2)}s`;
+          return (
+            <circle key={`pulse-${item.label}`} className="ox-hub-pulse" r={3} fillOpacity={0}>
+              <animateMotion
+                dur="3.4s"
+                begin={begin}
+                repeatCount="indefinite"
+                path={item.d}
+                keyPoints="1;0"
+                keyTimes="0;1"
+                calcMode="linear"
+              />
+              <animate
+                attributeName="fill-opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.14;0.86;1"
+                dur="3.4s"
+                begin={begin}
+                repeatCount="indefinite"
+              />
+            </circle>
+          );
+        })}
       </svg>
 
       <h2 className="ox-hub-core" style={{ left: "50%", top: pct(HUB.y, H), width: pct(HUB.w, W) }}>

@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useLenis } from "lenis/react";
-import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
+import { Reveal } from "@/components/Reveal";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 // Partner result screenshots (1620 x 2880, lossless WebP in /public/results).
 // Sources live in "New Assets icons/Results"; keep the alt text in sync if a screenshot changes.
@@ -55,23 +56,15 @@ export function ResultsGallery() {
     if (!dialogRef.current?.open) dialogRef.current?.showModal();
   };
 
-  const step = (direction: -1 | 1) => {
-    setOpen((current) => (current === null ? current : (current + direction + results.length) % results.length));
-  };
-
-  // Clicks on the dark backdrop (the dialog itself, not its contents) close it.
+  // Clicks on the dark backdrop (the dialog itself, not its contents) close it. Esc closes it natively.
   const onDialogClick = (event: MouseEvent<HTMLDialogElement>) => {
     if (event.target === event.currentTarget) dialogRef.current?.close();
   };
 
-  const onDialogKeyDown = (event: KeyboardEvent<HTMLDialogElement>) => {
-    if (event.key === "ArrowRight") step(1);
-    if (event.key === "ArrowLeft") step(-1);
-  };
-
   return (
     <div className="ox-proof">
-      <ul className="ox-proof-grid">
+      {/* Each card scales in, one after another. */}
+      <Reveal as="ul" className="ox-proof-grid" effect="scale" stagger={90} duration={1000}>
         {results.map((result, index) => (
           <li key={result.src}>
             <button
@@ -95,7 +88,7 @@ export function ResultsGallery() {
             </button>
           </li>
         ))}
-      </ul>
+      </Reveal>
 
       <p className="ox-proof-note">
         All testimonials on this page are from real clients of Obsidx. Your results may vary based on factors like your
@@ -109,7 +102,6 @@ export function ResultsGallery() {
         aria-label="Partner result, full size"
         onClose={() => setOpen(null)}
         onClick={onDialogClick}
-        onKeyDown={onDialogKeyDown}
         data-lenis-prevent
       >
         {open !== null && (
@@ -124,17 +116,10 @@ export function ResultsGallery() {
               sizes="(max-width: 760px) 92vw, 52vh"
             />
             <button type="button" className="ox-proof-close" onClick={() => dialogRef.current?.close()} aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                <path d="M5 5l14 14M19 5L5 19" />
+              </svg>
             </button>
-            <button type="button" className="ox-proof-step ox-proof-step--prev" onClick={() => step(-1)} aria-label="Previous result">
-              <span aria-hidden="true">←</span>
-            </button>
-            <button type="button" className="ox-proof-step ox-proof-step--next" onClick={() => step(1)} aria-label="Next result">
-              <span aria-hidden="true">→</span>
-            </button>
-            <p className="ox-proof-count" aria-live="polite">
-              {open + 1} / {results.length}
-            </p>
           </>
         )}
       </dialog>

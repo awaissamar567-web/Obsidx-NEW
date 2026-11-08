@@ -3,10 +3,10 @@ import { ResultsGallery } from "@/components/ResultsGallery";
 import { ResultsStandard } from "@/components/ResultsStandard";
 import { ServiceHub } from "@/components/ServiceHub";
 import { MemberDock } from "@/components/MemberDock";
-import { ScrollReveal } from "@/components/Motion";
 import { PartnerDashboard } from "@/components/PartnerDashboard";
 import { ProcessSlides } from "@/components/ProcessSlides";
 import { ProductFlow } from "@/components/ProductFlow";
+import { Reveal } from "@/components/Reveal";
 import { ToolsMarquee } from "@/components/ToolsMarquee";
 
 // TODO: replace with the real Obsidx profile URLs and inbox.
@@ -31,7 +31,8 @@ export default function Home() {
         </h1>
       </section>
 
-      <section className="trust-rail" aria-label="Products Obsidx builds">
+      {/* Follows the hero headline in: rises in just after the three headline lines. */}
+      <Reveal as="section" className="trust-rail" aria-label="Products Obsidx builds" delay={420}>
         <div className="trust-marquee" tabIndex={0} aria-label="Products Obsidx builds. Hover or focus to pause the moving message.">
           <div className="trust-track">
             {[0, 1].map((copy) => (
@@ -49,13 +50,15 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       <section className="about opportunity section-shell" id="opportunity">
-        <ScrollReveal className="about-statement opportunity-heading">
+        <Reveal className="about-statement opportunity-heading">
           <h2>You’ve Built the Audience. Now Build the Business Behind It.</h2>
-        </ScrollReveal>
-        <ProductFlow />
+        </Reveal>
+        <Reveal effect="rise" duration={1100}>
+          <ProductFlow />
+        </Reveal>
       </section>
 
       <ToolsMarquee />
@@ -63,15 +66,16 @@ export default function Home() {
       <ResultsStandard />
 
       <section className="ox-section section-shell" id="how-it-works">
-        <ScrollReveal className="ox-section-head">
+        <Reveal className="ox-section-head" stagger={90}>
           <p className="ox-eyebrow">How it works</p>
           <h2>From Audience Insight to a Business That Keeps Improving</h2>
-        </ScrollReveal>
+        </Reveal>
         <ProcessSlides />
       </section>
 
       <section className="ox-section ox-clarity section-shell" id="about">
-        <ScrollReveal className="ox-clarity-copy">
+        {/* Copy slides in from the left line by line while the dashboard comes in from the right. */}
+        <Reveal className="ox-clarity-copy" effect="left" stagger={90}>
           <p className="ox-eyebrow">Transparency</p>
           <h2>Clarity Creates Visible, Accountable Growth.</h2>
           <p>
@@ -79,33 +83,35 @@ export default function Home() {
             performs, and what happens next.
           </p>
           <p>Every partnership runs on measurable demand, transparent performance and decisions made together.</p>
-        </ScrollReveal>
-        <ScrollReveal>
+        </Reveal>
+        <Reveal effect="right" duration={1100} delay={120}>
           <PartnerDashboard />
-        </ScrollReveal>
+        </Reveal>
       </section>
 
       <section className="ox-section ox-hub section-shell" id="what-we-do" aria-label="What we do in every partnership">
-        <ServiceHub />
+        <Reveal effect="scale" duration={1000}>
+          <ServiceHub />
+        </Reveal>
         <p className="ox-hub-note">Everything here is included in every partnership.</p>
       </section>
 
       <section className="ox-section ox-proof-section section-shell" id="results" aria-label="Partner results">
-        <ScrollReveal className="ox-section-head">
+        <Reveal className="ox-section-head" stagger={90}>
           <p className="ox-eyebrow">Partner results</p>
           <h2>Numbers, Not Promises.</h2>
-        </ScrollReveal>
+        </Reveal>
         <ResultsGallery />
       </section>
 
       <section className="apply ox-apply section-shell" id="apply">
-        <ScrollReveal className="apply-copy">
+        <Reveal className="apply-copy" stagger={110}>
           <h2 className="ox-apply-title">
             You built the trust, <span className="ox-apply-accent">now build what comes next.</span>
           </h2>
           <p>Obsidx works with a limited number of established creators ready to build a serious, owned revenue stream.</p>
           <a className="button final-apply-button" href="/apply">Apply to Work With Obsidx</a>
-        </ScrollReveal>
+        </Reveal>
       </section>
 
       <footer className="site-footer">

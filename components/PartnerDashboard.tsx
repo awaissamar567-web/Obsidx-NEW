@@ -1,8 +1,11 @@
+import { CountUp } from "@/components/Reveal";
+
 // Illustrative mockup only: every figure below is sample data, not a real partner's results.
+// Each value counts up from zero when the dashboard scrolls into view.
 const kpis = [
-  { label: "Revenue this month", value: "$48.2k", delta: "+18%" },
-  { label: "Active members", value: "1,284", delta: "+96" },
-  { label: "Checkout conversion", value: "4.7%", delta: "+0.6" },
+  { label: "Revenue this month", prefix: "$", value: 48.2, decimals: 1, suffix: "k", delta: "+18%" },
+  { label: "Active members", prefix: "", value: 1284, decimals: 0, suffix: "", delta: "+96" },
+  { label: "Checkout conversion", prefix: "", value: 4.7, decimals: 1, suffix: "%", delta: "+0.6" },
 ] as const;
 
 const products = [
@@ -35,7 +38,9 @@ export function PartnerDashboard() {
             {kpis.map((kpi) => (
               <li key={kpi.label}>
                 <span>{kpi.label}</span>
-                <strong>{kpi.value}</strong>
+                <strong>
+                  <CountUp value={kpi.value} decimals={kpi.decimals} prefix={kpi.prefix} suffix={kpi.suffix} />
+                </strong>
                 <em>{kpi.delta}</em>
               </li>
             ))}
