@@ -51,9 +51,8 @@ const sectionTips: { selector: string; pose: Pose; tip: string }[] = [
   { selector: "#what-we-build", pose: "happy", tip: "Courses, communities, templates, SaaS. Everything we can build together." },
   { selector: "#how-it-works", pose: "point", tip: "Four steps, from research to launch. Keep scrolling through the cards." },
   { selector: "#about", pose: "talk", tip: "You always see your numbers. No guesswork, ever." },
-  { selector: ".ox-lists", pose: "curious", tip: "Who we work with, and everything we handle for you." },
+  { selector: "#what-we-do", pose: "happy", tip: "All of this comes with every partnership." },
   { selector: "#results", pose: "think", tip: "Partner results live here. Numbers, not promises." },
-  { selector: ".ox-included", pose: "happy", tip: "All of this comes with every partnership." },
   { selector: "#apply", pose: "love", tip: `Only ${seatsFilled} of ${seatsTotal} seats are taken. Click me to apply!` },
   { selector: ".site-footer", pose: "wave", tip: "Questions? Say hello at the email down here." },
 ];

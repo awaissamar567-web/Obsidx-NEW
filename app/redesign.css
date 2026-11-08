@@ -64,8 +64,7 @@
 .ox-hero-title,
 .ox-hero-title .ox-line,
 .ox-apply .apply-copy .ox-apply-title,
-.ox-apply .ox-apply-title .ox-line--1,
-.ox-apply .ox-apply-title .ox-line--2 {
+.ox-apply .ox-apply-title .ox-apply-accent {
   font-style: normal;
 }
 
@@ -420,173 +419,479 @@
   text-align: right;
 }
 
-/* ---------- Lists ---------- */
-.ox-lists {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2.5rem, 6vw, 6rem);
-  border-top: 1px solid var(--line);
+/* ---------- What we do: hub and spokes ---------- */
+.ox-hub {
+  position: relative;
+  isolation: isolate;
 }
 
-.ox-section .ox-list-title {
-  margin-bottom: 1.5rem;
-  color: var(--gold);
-  font-family: var(--serif);
-  font-size: clamp(1.9rem, 3vw, 2.6rem);
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: 0;
+/* Dotted grid behind the hub, fading out at the edges. */
+.ox-hub::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1.2px, transparent 1.6px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(75% 70% at 50% 50%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(75% 70% at 50% 50%, #000 35%, transparent 100%);
+  pointer-events: none;
 }
 
-.ox-list {
+.ox-hub-stage {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  aspect-ratio: 1200 / 600;
+}
+
+.ox-hub-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ox-hub-lines path {
+  fill: none;
+  stroke: rgba(252, 186, 75, 0.42);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+.ox-hub-lines path.is-hot {
+  stroke: var(--gold-light);
+  stroke-width: 2.2;
+}
+
+.ox-hub-pulse {
+  fill: var(--gold-light);
+  opacity: 0;
+  transition: opacity 0.6s ease 1.6s;
+}
+
+.is-in .ox-hub-pulse {
+  opacity: 0.9;
+}
+
+/* The "What we do" hub: a borderless gold rectangle the wires plug into. Ratio matches HUB.w / HUB.h. */
+.ox-section .ox-hub-core {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  aspect-ratio: 2 / 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.75rem;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #b47412 0%, var(--gold) 38%, var(--gold-light) 62%, #d98a16 100%);
+  box-shadow: 0 0 60px rgba(252, 186, 75, 0.22);
+  color: #1a1206;
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 2.1vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+
+.ox-hub-list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.ox-list li {
+.ox-hub-list li {
+  position: absolute;
+  z-index: 1;
   display: flex;
-  align-items: baseline;
-  gap: 1.25rem;
-  padding: 1.05rem 0;
-  border-bottom: 1px solid var(--line);
+  align-items: center;
+  gap: 0.9rem;
   color: var(--ink);
   font-family: var(--display);
-  font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+  font-size: clamp(0.95rem, 1.55vw, 1.25rem);
   font-weight: 600;
-  letter-spacing: -0.025em;
-  transition: color 0.2s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
-.ox-list li span {
-  color: var(--dim);
-  font-family: var(--body);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+/* The square marker sits at the line end: after the text on the left, before it on the right. */
+.ox-hub-list li::after,
+.ox-hub-list li::before {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(252, 186, 75, 0.1);
+  transition: transform 0.25s ease, background 0.2s ease;
 }
 
-.ox-list li:hover {
-  padding-left: 0.6rem;
+.ox-hub-list--left li {
+  transform: translate(-100%, -50%);
+}
+
+.ox-hub-list--left li::after {
+  content: "";
+}
+
+.ox-hub-list--right li {
+  transform: translate(0, -50%);
+}
+
+.ox-hub-list--right li::before {
+  content: "";
+}
+
+.ox-hub-list li.is-hot {
   color: var(--gold-light);
 }
 
-/* ---------- Results ---------- */
-.ox-results {
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--line);
-  list-style: none;
+.ox-hub-list li.is-hot::after,
+.ox-hub-list li.is-hot::before {
+  background: var(--gold-light);
+  transform: scale(1.25);
 }
 
-.ox-results li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-  align-items: center;
-  gap: 2rem;
-  padding: 1.75rem 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.ox-result-name strong {
-  display: block;
-  color: var(--ink);
-  font-family: var(--display);
-  font-size: clamp(1.3rem, 2.3vw, 1.9rem);
-  font-weight: 650;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-}
-
-.ox-result-name span {
+.ox-hub-note {
+  margin: clamp(1rem, 3vw, 2rem) 0 0;
   color: var(--dim);
-  font-size: 0.88rem;
-}
-
-.ox-result-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 0;
-}
-
-.ox-result-metrics dt {
-  color: var(--dim);
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.ox-result-metrics dd {
-  margin: 0.2rem 0 0;
-  color: var(--gold);
-  font-family: var(--display);
-  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
-  font-weight: 650;
-}
-
-/* ---------- Tags ---------- */
-.ox-included {
-  padding-top: 0;
+  font-size: 0.92rem;
   text-align: center;
 }
 
-.ox-tags {
-  display: flex;
-  max-width: 62rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.65rem;
-  margin: 0 auto;
+@media (prefers-reduced-motion: no-preference) {
+  .ox-section .ox-hub-core,
+  .ox-hub-list li {
+    opacity: 0;
+    transition: opacity 0.6s ease, color 0.2s ease;
+  }
+
+  .ox-section .ox-hub-core {
+    transition-delay: 0.15s;
+  }
+
+  .ox-hub-list li {
+    transition-delay: calc(0.5s + var(--i) * 0.07s), 0s;
+  }
+
+  .ox-section .is-in .ox-hub-core,
+  .is-in .ox-hub-list li {
+    opacity: 1;
+  }
+
+  .ox-hub-lines path {
+    transition: stroke-dashoffset 1.1s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.25s ease, stroke-width 0.25s ease;
+    transition-delay: calc(0.3s + var(--i) * 0.07s), 0s, 0s;
+  }
+}
+
+.is-in .ox-hub-lines path {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ox-hub-lines path {
+    stroke-dashoffset: 0;
+  }
+
+  .ox-hub-pulse {
+    display: none;
+  }
+}
+
+/* Narrow screens: drop the diagram, keep the hub and a clean list. */
+@media (max-width: 860px) {
+  .ox-hub-stage {
+    display: flex;
+    max-width: 30rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    aspect-ratio: auto;
+  }
+
+  .ox-hub-lines {
+    display: none;
+  }
+
+  .ox-section .ox-hub-core {
+    position: static;
+    width: 14rem !important;
+    transform: none;
+  }
+
+  .ox-hub-list {
+    width: 100%;
+    margin-top: -1.75rem;
+  }
+
+  .ox-hub-list--left {
+    margin-top: 0;
+  }
+
+  .ox-hub-list li,
+  .ox-hub-list--left li,
+  .ox-hub-list--right li {
+    position: static;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    white-space: normal;
+    transform: none;
+  }
+
+  .ox-hub-list--left li::after {
+    content: none;
+  }
+
+  .ox-hub-list--left li::before {
+    content: "";
+  }
+}
+
+/* ---------- Partner results: screenshot gallery ---------- */
+.ox-proof {
+  --proof-radius: 18px;
+}
+
+/* Tighter than the default section rhythm so the row sits close to its heading and the next section. */
+.ox-section.ox-proof-section {
+  padding-block: clamp(3.5rem, 6vw, 5rem);
+}
+
+.ox-proof-section .ox-section-head {
+  margin-bottom: clamp(1.5rem, 2.5vw, 2.25rem);
+}
+
+/* Static row: all five side by side across the full content width. */
+.ox-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1vw, 0.9rem);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.ox-tags li {
-  padding: 0.7rem 1.2rem;
-  border: 1px solid rgba(252, 186, 75, 0.2);
-  border-radius: 999px;
-  background: rgba(252, 186, 75, 0.04);
-  color: #e3ddd2;
-  font-size: 0.95rem;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+.ox-proof-note {
+  max-width: 62rem;
+  margin: 1.25rem auto 0;
+  color: var(--dim);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
 }
 
-.ox-tags li:hover {
+.ox-proof-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--proof-radius);
+  background: var(--surface);
+  transition: border-color 0.25s ease, box-shadow 0.35s ease;
+}
+
+.ox-proof-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ox-proof-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(252, 186, 75, 0.12);
+}
+
+.ox-proof-card:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+
+.ox-proof-zoom {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(15, 15, 15, 0.8);
+  color: var(--gold-light);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+.ox-proof-card:hover .ox-proof-zoom,
+.ox-proof-card:focus-visible .ox-proof-zoom {
+  opacity: 1;
+  transform: none;
+}
+
+.ox-proof-step,
+.ox-proof-close {
+  display: grid;
+  width: 2.9rem;
+  height: 2.9rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--gold-light);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.ox-proof-step:hover,
+.ox-proof-close:hover {
   border-color: var(--gold);
   background: rgba(252, 186, 75, 0.12);
-  color: var(--gold-light);
+}
+
+/* Lightbox */
+.ox-proof-dialog {
+  max-width: none;
+  max-height: none;
+  /* The global reset zeroes margins; auto restores the native modal centring. */
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.ox-proof-dialog::backdrop {
+  background: rgba(6, 6, 6, 0.88);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.ox-proof-full {
+  display: block;
+  width: auto;
+  height: min(90vh, calc(92vw * 16 / 9));
+  max-width: 92vw;
+  border-radius: var(--proof-radius, 18px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.ox-proof-close {
+  position: absolute;
+  top: 0;
+  right: -4rem;
+  background: rgba(15, 15, 15, 0.85);
+  font-size: 1.5rem;
+}
+
+.ox-proof-step {
+  position: absolute;
+  top: 50%;
+  background: rgba(15, 15, 15, 0.85);
+  transform: translateY(-50%);
+}
+
+.ox-proof-step--prev {
+  left: -4rem;
+}
+
+.ox-proof-step--next {
+  right: -4rem;
+}
+
+.ox-proof-count {
+  position: absolute;
+  bottom: -2.25rem;
+  left: 50%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 760px) {
+  /* Phones: two per row, the fifth centred on its own. */
+  .ox-proof-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ox-proof-grid li,
+  .ox-proof-grid li:nth-child(4) {
+    grid-column: span 2;
+  }
+
+  .ox-proof-grid li:nth-child(5) {
+    grid-column: 2 / span 2;
+  }
+
+  .ox-proof-full {
+    height: auto;
+    max-height: 82vh;
+    width: 92vw;
+    object-fit: contain;
+  }
+
+  .ox-proof-close {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .ox-proof-step {
+    top: auto;
+    bottom: -3.4rem;
+    transform: none;
+  }
+
+  .ox-proof-step--prev {
+    left: 0;
+  }
+
+  .ox-proof-step--next {
+    right: 0;
+  }
+
+  .ox-proof-count {
+    bottom: -2.6rem;
+  }
 }
 
 /* ---------- Closing CTA ---------- */
+/* One sentence in upright, regular-weight Times New Roman, all white. */
 .ox-apply .apply-copy .ox-apply-title {
-  display: flex;
+  display: block;
   max-width: none;
-  flex-direction: column;
   margin: 0 auto 1.75rem;
-  font-family: var(--display);
-  font-size: clamp(2.8rem, 9vw, 8.5rem);
-  font-weight: 700;
-  letter-spacing: -0.055em;
-  line-height: 0.88;
-  text-align: left;
-  text-transform: uppercase;
-}
-
-.ox-apply .ox-apply-title .ox-line--2 {
-  padding-left: 22%;
-}
-
-.ox-apply .ox-apply-title .ox-line--3 {
-  align-self: flex-end;
-  margin-top: 0.6rem;
-  color: var(--gold);
-  font-family: var(--serif);
-  font-size: 0.42em;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1;
+  color: var(--ink);
+  font-family: var(--quote-serif);
+  font-size: clamp(2rem, 4.6vw, 4.5rem);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+  text-align: center;
   text-transform: none;
+  text-wrap: balance;
+}
+
+/* Starts its own line, so the sentence reads "You built the trust, / now build what comes next." */
+.ox-apply .ox-apply-title .ox-apply-accent {
+  display: block;
 }
 
 .apply.ox-apply {
@@ -600,10 +905,6 @@
   max-width: 64rem;
   margin: 0 auto;
   padding: 0;
-}
-
-.ox-apply .apply-copy .ox-apply-title {
-  font-size: clamp(2.5rem, 6.2vw, 6rem);
 }
 
 /* ---------- Responsive ---------- */
@@ -655,22 +956,6 @@
     grid-template-columns: 1fr;
   }
 
-  .ox-lists {
-    grid-template-columns: 1fr;
-  }
-
-  .ox-results li {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .ox-apply .ox-apply-title .ox-line--2 {
-    padding-left: 10%;
-  }
-
-  .ox-apply .ox-apply-title .ox-line--3 {
-    font-size: 0.5em;
-  }
 }
 
 /* ---------- Custom cursor (gold-outlined arrow, drawn in /public/cursors) ---------- */

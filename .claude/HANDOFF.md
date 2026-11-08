@@ -9,7 +9,7 @@
 
 1. **Redesign from references** (Buff Motion, Bindery, We Are Example, Supaste, researched with the Inspo MCP). Dark `#0f0f0f` + gold `#fcba4b` brand kept.
 2. **Homepage order now** (`app/page.tsx`):
-   Header → Obi pet (`MemberDock`) → hero (big staggered headline only) → product-name marquee (`.trust-rail`, restored) → Opportunity (`ProductFlow`) → `ToolsMarquee` → `ResultsStandard` (`#what-we-build`) → How it works (`ProcessSlides`, sticky 01–04 cards) → Clarity + `PartnerDashboard` (`#about`) → Who we help / What we handle lists → Partner results (placeholders) → "Included in every partnership" tags → Apply card → footer.
+   Header → Obi pet (`MemberDock`) → hero (big staggered headline only) → product-name marquee (`.trust-rail`, restored) → Opportunity (`ProductFlow`) → `ToolsMarquee` → `ResultsStandard` (`#what-we-build`) → How it works (`ProcessSlides`, sticky 01–04 cards) → Clarity + `PartnerDashboard` (`#about`) → What we do (`ServiceHub`, hub-and-spoke map of everything included, `#what-we-do`) → Partner results (`ResultsGallery`, five screenshots from `public/results` in a static 3 + 2 grid, click one for a full-size lightbox) → Apply card → footer.
 3. **Removed at the user's request:** "Our belief" manifesto, hero tagline/paragraph/buttons/stats row, top "22 of 30 seats" announcement bar. Old member box, `ProcessCurve` and the refinery quote are no longer on the page.
 4. **Styles:** all new styles live in `app/redesign.css` (imported after `globals.css` in `app/layout.tsx`). It overrides legacy global rules (italic `h1`, `blockquote`, fixed-height `.apply`).
 5. **Fonts:**
@@ -30,7 +30,7 @@
 ## Open items / next steps
 
 - User feels the page **isn't premium enough yet** and was collecting references. Expect further direction.
-- Replace placeholders before launch: partner results (all metrics are "—"), "Who we help" categories, dashboard sample data, social URLs and email in `page.tsx`, seat count.
+- Replace placeholders before launch: dashboard sample data, social URLs and email in `page.tsx`, seat count.
 - Confirm the Apple Garamond license.
 - `components/ProcessCurve.tsx` (and its CSS in `globals.css`) is unused now and can be deleted.
 - Optional size wins that are not strictly lossless: the favicon/header logo `obsidx-gold-logo.png` is 3375×3375 (1.7 MB) but shown at 54 px; the Apple Garamond TTFs could become WOFF2 (lossless, needs a converter).
