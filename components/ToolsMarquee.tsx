@@ -34,7 +34,7 @@ export function ToolsMarquee() {
             {[0, 1].map((copy) => (
               <ul className="tools-list" aria-hidden={copy === 1} key={copy}>
                 {items.map((tool) => (
-                  <li key={tool.slug}>
+                  <li className={`tools-item--${tool.slug}`} key={tool.slug}>
                     {tool.logo
                       // eslint-disable-next-line @next/next/no-img-element -- logos are small, unknown-size brand files
                       ? <img src={tool.logo} alt={tool.name} loading="lazy" />

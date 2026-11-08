@@ -6,16 +6,16 @@ import "@fontsource/cormorant-garamond/500.css";
 import "@fontsource/cormorant-garamond/500-italic.css";
 import "@fontsource/cormorant-garamond/600-italic.css";
 import "@fontsource/lora/400-italic.css";
-import "@fontsource/open-sauce-sans/400.css";
-import "@fontsource/open-sauce-sans/400-italic.css";
+// 400, 400-italic and 600-italic are declared in globals.css instead: the package's .woff2 files
+// for those weights are broken (they are PostScript fonts, not WOFF2), so we serve the .woff copies.
 import "@fontsource/open-sauce-sans/500.css";
 import "@fontsource/open-sauce-sans/500-italic.css";
 import "@fontsource/open-sauce-sans/600.css";
-import "@fontsource/open-sauce-sans/600-italic.css";
 import "@fontsource/open-sauce-sans/700.css";
 import "@fontsource/open-sauce-sans/700-italic.css";
 import "lenis/dist/lenis.css";
 import "./globals.css";
+import "./redesign.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {

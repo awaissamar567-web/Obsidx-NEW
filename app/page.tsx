@@ -1,27 +1,11 @@
 import { Header } from "@/components/Header";
 import { ResultsStandard } from "@/components/ResultsStandard";
-import { HeroEntrance, ScrollReveal } from "@/components/Motion";
+import { MemberDock } from "@/components/MemberDock";
+import { ScrollReveal } from "@/components/Motion";
+import { PartnerDashboard } from "@/components/PartnerDashboard";
+import { ProcessSlides } from "@/components/ProcessSlides";
 import { ProductFlow } from "@/components/ProductFlow";
 import { ToolsMarquee } from "@/components/ToolsMarquee";
-
-const operatingSteps = [
-  {
-    title: "Find the Opportunity",
-    body: "Your audience, expertise, existing demand, and commercial signals reveal the strongest business opportunity.",
-  },
-  {
-    title: "Shape the Offer",
-    body: "The product, positioning, pricing, and customer journey are developed into an offer that is clear, relevant, and compelling.",
-  },
-  {
-    title: "Build the System",
-    body: "Your tools, sales process, delivery experience, and operating workflow are connected into a system built to launch and grow.",
-  },
-  {
-    title: "Launch and Improve",
-    body: "Customer behavior, revenue, retention, and feedback guide each improvement after launch.",
-  },
-] as const;
 
 // TODO: replace with the real Obsidx profile URLs and inbox.
 const socialLinks = [
@@ -31,22 +15,59 @@ const socialLinks = [
 ] as const;
 const contactEmail = "hello@obsidx.com";
 
+// TODO: confirm the creator categories Obsidx wants to target.
+const whoWeHelp = [
+  "Educators & Experts",
+  "Coaches & Consultants",
+  "Fitness & Wellness",
+  "Finance & Business",
+  "Creative & Design",
+  "Tech & Productivity",
+] as const;
+
+const whatWeHandle = [
+  "Audience Research",
+  "Offer & Pricing",
+  "Product Build",
+  "Sales & Funnels",
+  "Launch Operations",
+  "Growth & Retention",
+] as const;
+
+// TODO: replace with real, approved partner results. Metrics stay as "—" until confirmed.
+const partnerResults = [
+  { partner: "Partner case study 01", niche: "Education creator · Cohort course", metrics: ["Launch revenue", "Students", "Completion"] },
+  { partner: "Partner case study 02", niche: "Fitness creator · Paid community", metrics: ["Members", "Monthly revenue", "Retention"] },
+  { partner: "Partner case study 03", niche: "Business creator · Template library", metrics: ["Units sold", "Conversion", "Repeat buyers"] },
+] as const;
+
+const included = [
+  "100% owned by you",
+  "Audience research",
+  "Offer & pricing",
+  "Product build",
+  "Sales pages",
+  "Checkout & payments",
+  "Launch operations",
+  "Email & community",
+  "Performance reporting",
+  "Monthly strategy reviews",
+  "1:1 partner",
+] as const;
+
 export default function Home() {
   return (
-    <main>
+    <main className="ox-page">
       <Header />
+      <MemberDock />
 
-      <section className="hero section-shell" id="home">
-        <HeroEntrance className="hero-copy">
-          <h1>Your Audience Is Already Paying Attention. Build Something They Can Own With You.</h1>
-          <a className="button hero-button" href="/apply">Apply to Work With Obsidx</a>
-        </HeroEntrance>
+      <section className="ox-hero" id="home">
+        <h1 className="ox-hero-title">
+          <span className="ox-line ox-line--1">Your audience</span>{" "}
+          <span className="ox-line ox-line--2">is paying</span>{" "}
+          <span className="ox-line ox-line--3">attention.</span>
+        </h1>
       </section>
-
-      <aside className="application-cap" aria-label="Application availability">
-        <span><strong>20</strong><span aria-hidden="true">/</span><strong>25</strong> Members</span>
-        <a href="/apply">Apply Now</a>
-      </aside>
 
       <section className="trust-rail" aria-label="Products Obsidx builds">
         <div className="trust-marquee" tabIndex={0} aria-label="Products Obsidx builds. Hover or focus to pause the moving message.">
@@ -79,38 +100,97 @@ export default function Home() {
 
       <ResultsStandard />
 
-      <section className="about section-shell" id="how-it-works">
-        <ScrollReveal className="about-statement">
+      <section className="ox-section section-shell" id="how-it-works">
+        <ScrollReveal className="ox-section-head">
+          <p className="ox-eyebrow">How it works</p>
           <h2>From Audience Insight to a Business That Keeps Improving</h2>
         </ScrollReveal>
-
-        <ScrollReveal className="operating-list process-list">
-          {operatingSteps.map((step) => (
-            <article key={step.title}>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </div>
-            </article>
-          ))}
-        </ScrollReveal>
+        <ProcessSlides />
       </section>
 
-      <section className="about standard-section section-shell" id="about">
-        <ScrollReveal className="about-statement">
+      <section className="ox-section ox-clarity section-shell" id="about">
+        <ScrollReveal className="ox-clarity-copy">
+          <p className="ox-eyebrow">Transparency</p>
           <h2>Clarity Creates Visible, Accountable Growth.</h2>
-          <p>Your creator business should never depend on guesswork.</p>
-          <p>You should understand what is being built, why it matters, how it performs, and what needs to happen next.</p>
-          <p>Every Obsidx partnership is built around measurable demand, transparent performance, and decisions made together.</p>
+          <p>
+            Your creator business should never depend on guesswork. You see what is being built, why it matters, how it
+            performs, and what happens next.
+          </p>
+          <p>Every partnership runs on measurable demand, transparent performance and decisions made together.</p>
         </ScrollReveal>
-        <ScrollReveal><blockquote>
-          “Attention is the new oil. But oil is worthless if you don't have a refinery. We build the refinery.”
-        </blockquote></ScrollReveal>
+        <ScrollReveal>
+          <PartnerDashboard />
+        </ScrollReveal>
       </section>
 
-      <section className="apply section-shell" id="apply">
+      <section className="ox-section ox-lists section-shell" aria-label="Who we help and what we handle">
+        <ScrollReveal className="ox-list-col">
+          <h2 className="ox-list-title">Who we help</h2>
+          <ol className="ox-list">
+            {whoWeHelp.map((item, index) => (
+              <li key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {item}
+              </li>
+            ))}
+          </ol>
+        </ScrollReveal>
+        <ScrollReveal className="ox-list-col">
+          <h2 className="ox-list-title">What we handle</h2>
+          <ol className="ox-list">
+            {whatWeHandle.map((item, index) => (
+              <li key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {item}
+              </li>
+            ))}
+          </ol>
+        </ScrollReveal>
+      </section>
+
+      <section className="ox-section section-shell" id="results" aria-label="Partner results">
+        <ScrollReveal className="ox-section-head">
+          <p className="ox-eyebrow">Partner results</p>
+          <h2>Numbers, Not Promises.</h2>
+        </ScrollReveal>
+        <ul className="ox-results">
+          {partnerResults.map((result) => (
+            <li key={result.partner}>
+              <div className="ox-result-name">
+                <strong>{result.partner}</strong>
+                <span>{result.niche}</span>
+              </div>
+              <dl className="ox-result-metrics">
+                {result.metrics.map((metric) => (
+                  <div key={metric}>
+                    <dt>{metric}</dt>
+                    <dd>—</dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="ox-section ox-included section-shell" aria-label="Included in every partnership">
+        <ScrollReveal>
+          <p className="ox-eyebrow">Included in every partnership</p>
+          <ul className="ox-tags">
+            {included.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        </ScrollReveal>
+      </section>
+
+      <section className="apply ox-apply section-shell" id="apply">
         <ScrollReveal className="apply-copy">
-          <h2>You Built the Trust. Now Build What Comes Next.</h2>
+          <h2 className="ox-apply-title">
+            <span className="ox-line ox-line--1">You built</span>{" "}
+            <span className="ox-line ox-line--2">the trust.</span>{" "}
+            <em className="ox-line ox-line--3">Now build what comes next.</em>
+          </h2>
           <p>Obsidx works with a limited number of established creators ready to build a serious, owned revenue stream.</p>
           <a className="button final-apply-button" href="/apply">Apply to Work With Obsidx</a>
         </ScrollReveal>

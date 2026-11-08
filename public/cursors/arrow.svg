@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6" />
+    </filter>
+  </defs>
+  <!-- Soft gold glow -->
+  <path d="M9.17 6.49 L23.33 13.11 Q26.5 14.6 23.13 15.55 L19 16.72 Q16.6 17.4 15.64 19.71 L13.95 23.77 Q12.6 27 11.6 23.65 L7 8.35 Q6 5 9.17 6.49 Z" fill="#FCBA4B" stroke="#FCBA4B" stroke-width="5" stroke-linejoin="round" opacity="0.55" filter="url(#glow)" />
+  <!-- Gold outline -->
+  <path d="M9.17 6.49 L23.33 13.11 Q26.5 14.6 23.13 15.55 L19 16.72 Q16.6 17.4 15.64 19.71 L13.95 23.77 Q12.6 27 11.6 23.65 L7 8.35 Q6 5 9.17 6.49 Z" fill="#F5B21C" stroke="#F5B21C" stroke-width="4.2" stroke-linejoin="round" />
+  <!-- Black body, rounded via a same-colour stroke -->
+  <path d="M9.17 6.49 L23.33 13.11 Q26.5 14.6 23.13 15.55 L19 16.72 Q16.6 17.4 15.64 19.71 L13.95 23.77 Q12.6 27 11.6 23.65 L7 8.35 Q6 5 9.17 6.49 Z" fill="#000" stroke="#000" stroke-width="1.4" stroke-linejoin="round" />
+</svg>
