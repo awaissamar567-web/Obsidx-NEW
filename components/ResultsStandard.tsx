@@ -141,7 +141,7 @@ export function ResultsStandard() {
           >
             <h3 className="font-['Open_Sauce_Sans'] text-[1.55rem] font-semibold leading-[1.1] tracking-[-0.03em] text-white">{card.title}</h3>
             <p className="mt-3 text-[0.95rem] leading-relaxed text-[#AAA6A0]"><ResponsiveCopy full={card.body} short={card.short} /></p>
-            <div className="mt-auto h-[210px] pt-6">{card.visual}</div>
+            <div className="revenue-visual mt-auto h-[210px] pt-6">{card.visual}</div>
             {card.overlay}
           </motion.article>
         ))}

@@ -36,7 +36,9 @@ export function ProductRings() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let W = box.clientWidth;
     let H = box.clientHeight;
-    const scaleFor = (w: number) => Math.min(1.15, Math.max(0.7, w / 380));
+    // --ring-scale (CSS, default 1) shrinks the rings where the card is shorter, e.g. on phones.
+    const ringScale = () => parseFloat(getComputedStyle(box).getPropertyValue("--ring-scale")) || 1;
+    const scaleFor = (w: number) => Math.min(1.15, Math.max(0.7, w / 380)) * ringScale();
 
     const bodies: Body[] = rings.map((ring, i) => {
       const r = ring.r;

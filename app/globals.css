@@ -3346,11 +3346,37 @@ blockquote {
   }
 
   .flow-stage--tall .flow-doc {
-    width: calc(var(--u) * 320);
+    width: calc(var(--u) * 400);
   }
 
-  .flow-stage--tall .flow-title {
-    font-size: calc(var(--u) * 72);
+  /* "Perfect Product" sits on the product image as a dark label, so it floats with it. */
+  .flow-stage--tall .flow-doc-float {
+    position: relative;
+  }
+
+  .flow-doc-label {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    padding: calc(var(--u) * 16) calc(var(--u) * 34);
+    border-radius: calc(var(--u) * 22);
+    background: rgba(18, 15, 10, 0.94);
+    box-shadow: 0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(0, 0, 0, 0.5);
+    font-family: var(--display);
+    font-size: calc(var(--u) * 50);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    white-space: nowrap;
+    translate: -50% -50%;
+  }
+
+  .flow-doc-label span {
+    background: linear-gradient(180deg, #ffd58e 0%, #fcba4b 55%, #e79a1f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .flow-stage--tall .flow-wire {

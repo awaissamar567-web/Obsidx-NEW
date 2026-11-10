@@ -636,52 +636,76 @@
   }
 }
 
-/* Narrow screens: drop the diagram, keep the hub and a clean list. */
+/* Narrow screens: the map is swapped for a heading and a grid of rounded tiles
+   (ServiceList in components/ServiceHub.tsx). */
+.ox-services {
+  display: none;
+}
+
 @media (max-width: 860px) {
   .ox-hub-stage {
-    display: flex;
-    max-width: 30rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.75rem;
-    aspect-ratio: auto;
-  }
-
-  .ox-hub-lines {
     display: none;
   }
 
-  .ox-section .ox-hub-core {
-    position: static;
-    width: 14rem !important;
-    transform: none;
+  .ox-services {
+    display: block;
+    max-width: 30rem;
+    margin: 0 auto;
   }
 
-  .ox-hub-list {
-    width: 100%;
-    margin-top: -1.75rem;
+  .ox-section .ox-services-title {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.9rem, 8.5vw, 2.6rem);
   }
 
-  .ox-hub-list--left {
-    margin-top: 0;
+  .ox-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .ox-hub-list li,
-  .ox-hub-list--left li,
-  .ox-hub-list--right li {
-    position: static;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid var(--line);
-    white-space: normal;
-    transform: none;
+  .ox-services-grid li {
+    display: flex;
+    min-height: 6.25rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.9rem;
+    padding: 0.95rem;
+    border: 1px solid rgba(252, 186, 75, 0.16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, #1a1712 0%, #12100d 100%);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
   }
 
-  .ox-hub-list--left li::after {
-    content: none;
+  .ox-services-mark {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    border-radius: 4px;
+    background: var(--gold);
+    box-shadow: 0 0 0 4px rgba(252, 186, 75, 0.12);
   }
 
-  .ox-hub-list--left li::before {
-    content: "";
+  @media (prefers-reduced-motion: no-preference) {
+    .ox-services-grid li {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: calc(var(--i) * 0.05s);
+    }
+
+    .ox-services.is-in .ox-services-grid li {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 
@@ -1151,4 +1175,330 @@ textarea,
     max-width: min(240px, calc(100vw - 2.5rem));
     font-size: 0.78rem;
   }
+}
+
+/* ---------- Phone-only tweaks ----------
+   Everything that changes the look sits inside the max-width: 760px block. The few rules above it
+   only keep the desktop exactly as it was (the hero CTA and social icons exist in the markup but
+   are hidden there). */
+.ox-hero-cta {
+  display: none;
+}
+
+.site-footer-social {
+  display: contents;
+}
+
+.site-footer-social-icon {
+  display: none;
+}
+
+.tools-marquee--all,
+.header-menu-button,
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* Header: the Apply pill gives way to a menu button that lists the page sections (Header.tsx). */
+  .site-header .header-icon-link.header-apply-link {
+    display: none;
+  }
+
+  .header-menu-button {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255, 213, 142, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--gold-light);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .is-menu-open .header-menu-button {
+    border-color: rgba(255, 213, 142, 0.6);
+    background: rgba(252, 186, 75, 0.1);
+  }
+
+  .header-menu-button:focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: 2px;
+  }
+
+  .header-menu-icon {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 12px;
+  }
+
+  .header-menu-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.8px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  }
+
+  .header-menu-icon span:nth-child(1) { top: 0; }
+  .header-menu-icon span:nth-child(2) { top: 5px; }
+  .header-menu-icon span:nth-child(3) { top: 10px; }
+
+  .is-menu-open .header-menu-icon span:nth-child(1) {
+    top: 5px;
+    transform: rotate(45deg);
+  }
+
+  .is-menu-open .header-menu-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .is-menu-open .header-menu-icon span:nth-child(3) {
+    top: 5px;
+    transform: rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    left: 0;
+    display: block;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 213, 142, 0.14);
+    border-radius: 24px;
+    background: #0d0c0a;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+    transform-origin: top right;
+  }
+
+  .mobile-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mobile-menu li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mobile-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 14px;
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .mobile-menu li a:active,
+  .mobile-menu li a:focus-visible {
+    background: rgba(252, 186, 75, 0.08);
+    color: var(--gold-light);
+    outline: none;
+  }
+
+  .mobile-menu-num {
+    min-width: 1.4rem;
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .mobile-menu .mobile-menu-apply {
+    display: flex;
+    width: 100%;
+    min-height: 54px;
+    margin-top: 0.5rem;
+    border-radius: 14px;
+    font-size: 0.95rem;
+  }
+
+  /* Tools: one strip with all ten logos instead of two. Ten slots of a third of the strip take
+     twice as long to pass, so the duration doubles to keep the desktop speed. */
+  .tools-marquee--split {
+    display: none;
+  }
+
+  .tools-marquee--all {
+    display: flex;
+  }
+
+  .tools-marquee--all .tools-track {
+    animation-duration: 52s;
+  }
+
+  /* Hero: a bigger four-line headline that fills the width, then a full-width CTA. */
+  .ox-hero {
+    display: flex;
+    min-height: calc(100svh - 4.5rem);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.75rem;
+    padding: 6.5rem 1.25rem 3rem;
+  }
+
+  /* "ATTENTION." is ~5.52em wide, so this makes the longest line span the content width. */
+  .ox-hero-title {
+    font-size: calc((100vw - 2.5rem) / 5.62);
+  }
+
+  .ox-hero .ox-hero-cta {
+    display: inline-flex;
+    width: 100%;
+    min-height: 62px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ox-hero .ox-hero-cta {
+      animation: ox-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+    }
+  }
+
+  /* "You've Built the Audience..." in a lighter weight. */
+  #opportunity .opportunity-heading h2 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  /* Top Performing Revenue Models: compact, close-to-square cards. */
+  #what-we-build .revenue-card {
+    --ring-scale: 0.78;
+    min-height: 0;
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  #what-we-build .revenue-card h3 {
+    font-size: 1.25rem;
+  }
+
+  #what-we-build .revenue-card p {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+  }
+
+  #what-we-build .revenue-visual {
+    height: 150px;
+    padding-top: 0.75rem;
+  }
+
+  #what-we-build .revenue-grid {
+    margin-top: 1.5rem;
+    gap: 0.75rem;
+  }
+
+  /* Transparency section (and its footer link) are desktop only. */
+  #about,
+  .site-footer .footer-link-about {
+    display: none;
+  }
+
+  /* Footer: smaller text, social links as icon buttons, shining wordmark. */
+  .site-footer-columns {
+    gap: 1.5rem 2rem;
+    padding-top: 2.5rem;
+  }
+
+  .site-footer-columns > * {
+    gap: 0.7rem;
+  }
+
+  .site-footer h2 {
+    margin-bottom: 0.15rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .site-footer-columns a {
+    font-size: 0.82rem;
+  }
+
+  .site-footer-social {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  /* Bare icons: no box, the tap area is just padding around the glyph. */
+  .site-footer-columns .site-footer-social a {
+    display: grid;
+    margin: -0.4rem;
+    padding: 0.4rem;
+    place-items: center;
+    color: var(--ink);
+  }
+
+  .site-footer-social-icon {
+    display: block;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .site-footer-social-label {
+    display: none;
+  }
+
+  /* A bright band sweeps across the gold wordmark, then rests. */
+  .site-footer-wordmark {
+    background: linear-gradient(100deg, #d99a2f 0%, var(--gold) 36%, var(--gold-light) 45%, #ffffff 50%, var(--gold-light) 55%, var(--gold) 64%, #d99a2f 100%);
+    background-size: 260% 100%;
+    background-position: 0 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .site-footer-wordmark {
+      animation: ox-shine 4.2s ease-in-out 0.6s infinite;
+    }
+  }
+
+  /* Obi on phones: dragged with a finger (MemberDock.tsx). */
+  .member-dock--static {
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .member-dock--static .pet-bubble {
+    max-width: min(240px, calc(100vw - 2.5rem), var(--bubble-room, 240px));
+  }
+
+  .member-dock.is-below .pet-bubble {
+    top: calc(100% + 10px);
+    bottom: auto;
+    border-radius: 4px 16px 16px 16px;
+    transform-origin: top left;
+  }
+
+  .member-dock.is-below.is-flipped .pet-bubble {
+    border-radius: 16px 4px 16px 16px;
+    transform-origin: top right;
+  }
+
+  .member-dock.is-carried .pet-sprite {
+    scale: 1.12;
+    filter: drop-shadow(0 0 1px rgba(255, 231, 174, 0.55)) drop-shadow(0 16px 18px rgba(0, 0, 0, 0.6));
+  }
+}
+
+@keyframes ox-shine {
+  0% { background-position: 100% 0; }
+  55%,
+  100% { background-position: 0 0; }
 }

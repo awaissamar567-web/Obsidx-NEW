@@ -23,6 +23,10 @@ const TIP_MS = 5200;
 const SLEEP_AFTER_MS = 20000;
 // Space the speech bubble needs on the right before it flips to the left side.
 const BUBBLE_ROOM = 300;
+// Phones: a finger has to move this far (px) on Obi before it counts as a drag instead of a tap.
+const DRAG_START = 8;
+// Phones: below this distance from the top of the screen the speech bubble opens underneath Obi.
+const BUBBLE_BELOW_AT = 150;
 
 // Frame order in /public/pet/obi-sprite.webp (built by scripts/build-pet-sprite.js).
 const FRAME = {
@@ -70,7 +74,12 @@ export function MemberDock() {
   const [blink, setBlink] = useState(false);
   const [sleepy, setSleepy] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
+  const [carried, setCarried] = useState(false);
+  const [landed, setLanded] = useState(false);
+  // Static mode: which way the bubble opens, updated as Obi is dragged around.
+  const [bubbleSide, setBubbleSide] = useState({ left: true, below: false });
   const lastMoveRef = useRef(0);
+  const draggedAtRef = useRef(0);
 
   const expanded = hover !== null || celebrating;
 
@@ -129,8 +138,11 @@ export function MemberDock() {
     const check = () => {
       queued = false;
       const middle = window.innerHeight / 2;
-      let match = targets[0];
-      for (const entry of targets) {
+      // Skip sections hidden at this width (e.g. Transparency on phones): their box reads as top 0.
+      const visible = targets.filter((entry) => entry.el.getClientRects().length > 0);
+      if (visible.length === 0) return;
+      let match = visible[0];
+      for (const entry of visible) {
         if (entry.el.getBoundingClientRect().top <= middle) match = entry;
       }
       if (match.selector === current) return;
@@ -265,8 +277,103 @@ export function MemberDock() {
     };
   }, [mode]);
 
+  // Phones and tablets (static mode): drag Obi anywhere with a finger or pen; a tap still opens /apply.
+  // Mouse input never starts a drag, so the desktop pet is unchanged.
+  useEffect(() => {
+    const dock = dockRef.current;
+    if (!dock || mode !== "static") return;
+
+    // Offset from the CSS resting spot in the bottom-right corner.
+    const offset = { x: 0, y: 0 };
+    const start = { x: 0, y: 0, ox: 0, oy: 0 };
+    let pointerId = -1;
+    let moved = false;
+    let landTimer = 0;
+
+    const place = () => {
+      // The untransformed box is the rendered box minus the current offset.
+      const rect = dock.getBoundingClientRect();
+      const baseLeft = rect.left - offset.x;
+      const baseTop = rect.top - offset.y;
+      offset.x = Math.min(Math.max(offset.x, EDGE - baseLeft), window.innerWidth - EDGE - rect.width - baseLeft);
+      offset.y = Math.min(Math.max(offset.y, EDGE - baseTop), window.innerHeight - EDGE - rect.height - baseTop);
+      dock.style.transform = `translate3d(${offset.x.toFixed(1)}px, ${offset.y.toFixed(1)}px, 0)`;
+
+      const left = baseLeft + offset.x;
+      const top = baseTop + offset.y;
+      const openLeft = left + rect.width / 2 > window.innerWidth / 2;
+      const below = top < BUBBLE_BELOW_AT;
+      setBubbleSide((side) => (side.left === openLeft && side.below === below ? side : { left: openLeft, below }));
+      const room = openLeft ? left + rect.width - 6 - EDGE : window.innerWidth - left - 6 - EDGE;
+      dock.style.setProperty("--bubble-room", `${Math.max(140, Math.round(room))}px`);
+    };
+
+    const onDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse" || !event.isPrimary) return;
+      pointerId = event.pointerId;
+      Object.assign(start, { x: event.clientX, y: event.clientY, ox: offset.x, oy: offset.y });
+      moved = false;
+    };
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerId !== pointerId) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (!moved) {
+        if (Math.hypot(dx, dy) < DRAG_START) return;
+        moved = true;
+        // Touch is usually captured already; capture refusal is harmless, the drag still works.
+        try {
+          if (!dock.hasPointerCapture(pointerId)) dock.setPointerCapture(pointerId);
+        } catch {}
+        setHover(null);
+        setLanded(false);
+        setCarried(true);
+      }
+      offset.x = start.ox + dx;
+      offset.y = start.oy + dy;
+      place();
+    };
+    const onUp = (event: PointerEvent) => {
+      if (event.pointerId !== pointerId) return;
+      pointerId = -1;
+      if (!moved) return;
+      moved = false;
+      // Swallow the click that follows the drop, so a drag never opens /apply.
+      draggedAtRef.current = performance.now();
+      setHover(null);
+      setCarried(false);
+      setLanded(true);
+      window.clearTimeout(landTimer);
+      landTimer = window.setTimeout(() => setLanded(false), 700);
+    };
+    const onResize = () => place();
+
+    place();
+    dock.addEventListener("pointerdown", onDown);
+    dock.addEventListener("pointermove", onMove);
+    dock.addEventListener("pointerup", onUp);
+    dock.addEventListener("pointercancel", onUp);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.clearTimeout(landTimer);
+      dock.removeEventListener("pointerdown", onDown);
+      dock.removeEventListener("pointermove", onMove);
+      dock.removeEventListener("pointerup", onUp);
+      dock.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("resize", onResize);
+      dock.style.transform = "";
+      dock.style.removeProperty("--bubble-room");
+      setCarried(false);
+    };
+  }, [mode]);
+
   // Click: a short celebration before heading to /apply (new-tab clicks behave normally).
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (performance.now() - draggedAtRef.current < 500) {
+      event.preventDefault();
+      return;
+    }
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     setCelebrating(true);
@@ -274,10 +381,12 @@ export function MemberDock() {
     window.setTimeout(() => window.location.assign(href), 650);
   };
 
-  const showTip = tipVisible && tip !== null && !expanded;
+  const showTip = tipVisible && tip !== null && !expanded && !carried;
 
   let pose: Pose = "idle";
   if (celebrating) pose = "celebrate";
+  else if (carried) pose = "surprised";
+  else if (landed) pose = "happy";
   else if (hover) pose = hover;
   else if (walking) pose = "walk";
   else if (showTip && tip) pose = tip.pose;
@@ -288,8 +397,11 @@ export function MemberDock() {
     <a
       ref={dockRef}
       href="/apply"
-      className={`member-dock member-dock--${mode}${expanded ? " is-open" : ""}${mode === "static" ? " is-flipped" : ""}`}
+      className={`member-dock member-dock--${mode}${expanded ? " is-open" : ""}${
+        mode === "static" ? `${bubbleSide.left ? " is-flipped" : ""}${bubbleSide.below ? " is-below" : ""}` : ""
+      }${carried ? " is-carried" : ""}`}
       aria-label={`${seatsFilled} of ${seatsTotal} member seats filled. Apply now.`}
+      draggable={mode === "static" ? false : undefined}
       onPointerEnter={() => setHover("surprised")}
       onPointerLeave={() => setHover(null)}
       onFocus={() => setHover("happy")}

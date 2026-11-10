@@ -5,7 +5,8 @@ import { useRef, useState, type CSSProperties } from "react";
 
 // Hub-and-spoke map of everything included in a partnership.
 // Geometry lives in one 1200 x 600 coordinate space shared by the SVG lines and the HTML labels,
-// so labels stay pinned to their line ends at any width. Below 860px it becomes a stacked list.
+// so labels stay pinned to their line ends at any width. Below 860px the map is swapped for a
+// heading and a grid of rounded tiles (ServiceList; the switch is in redesign.css).
 const W = 1200;
 const H = 600;
 const HUB = { x: 600, y: 300, w: 240, h: 120 }; // the "What we do" rectangle
@@ -38,6 +39,15 @@ const spokes = [
 const pct = (value: number, total: number) => `${((value / total) * 100).toFixed(3)}%`;
 
 export function ServiceHub() {
+  return (
+    <>
+      <HubMap />
+      <ServiceList />
+    </>
+  );
+}
+
+function HubMap() {
   const stageRef = useRef<HTMLDivElement>(null);
   const inView = useInView(stageRef, { once: true, margin: "0px 0px -20% 0px" });
   const [hot, setHot] = useState<number | null>(null);
@@ -104,6 +114,26 @@ export function ServiceHub() {
           )}
         </ul>
       ))}
+    </div>
+  );
+}
+
+// Phones: "What we do" as a heading, then every item in its own rounded square tile.
+function ServiceList() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+
+  return (
+    <div ref={ref} className={`ox-services${inView ? " is-in" : ""}`}>
+      <h2 className="ox-services-title">What we do</h2>
+      <ul className="ox-services-grid">
+        {[...leftItems, ...rightItems].map((label, i) => (
+          <li key={label} style={{ "--i": i } as CSSProperties}>
+            <span className="ox-services-mark" aria-hidden="true" />
+            {label}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

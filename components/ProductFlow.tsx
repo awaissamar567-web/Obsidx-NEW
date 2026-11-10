@@ -48,31 +48,34 @@ const layouts: Layout[] = [
       "M1724 895 C 1489 746, 1314 590, 1150 578",
     ],
   },
+  // Phones: the "Perfect Product" label sits on the product image (see flow-doc-label), so the
+  // output wires run straight up into the product instead of stopping under a caption.
   {
     name: "tall",
     width: 1000,
-    height: 1500,
-    doc: { x: 500, y: 690, width: 320 },
-    title: { x: 500, y: 940 },
+    height: 1400,
+    doc: { x: 500, y: 690, width: 400 },
+    title: { x: 500, y: 690 },
     inputs: [
       { label: "Audience", icon: "/flow/audience.webp", x: 180, y: 140 },
       { label: "Expertise", icon: "/flow/expertise.webp", x: 500, y: 140 },
       { label: "Authority", icon: "/flow/authority.webp", x: 820, y: 140 },
     ],
     outputs: [
-      { label: "Strategy", icon: "/flow/strategy.webp", x: 180, y: 1260 },
-      { label: "System", icon: "/flow/system.webp", x: 500, y: 1260 },
-      { label: "Launch", icon: "/flow/launch.webp", x: 820, y: 1260 },
+      { label: "Strategy", icon: "/flow/strategy.webp", x: 180, y: 1190 },
+      { label: "System", icon: "/flow/system.webp", x: 500, y: 1190 },
+      { label: "Launch", icon: "/flow/launch.webp", x: 820, y: 1190 },
     ],
     inputPaths: [
       "M180 310 C 180 420, 470 410, 492 524",
       "M500 310 C 500 390, 500 450, 500 524",
       "M820 310 C 820 420, 530 410, 508 524",
     ],
+    // Each ends just inside the product's bottom edge, so the wire meets the image.
     outputPaths: [
-      "M180 1175 C 180 1080, 470 1090, 492 990",
-      "M500 1175 C 500 1110, 500 1050, 500 990",
-      "M820 1175 C 820 1080, 530 1090, 508 990",
+      "M180 1105 C 180 1000, 470 1010, 484 880",
+      "M500 1105 C 500 1030, 500 960, 500 880",
+      "M820 1105 C 820 1000, 530 1010, 516 880",
     ],
   },
 ];
@@ -194,22 +197,37 @@ function FlowStage({ layout }: { layout: Layout }) {
         }}
       >
         <div className="flow-doc-float">
-          <Image className="flow-doc-img" src="/flow/product.webp" alt="" width={640} height={771} sizes="(max-width: 760px) 34vw, 200px" priority={false} />
+          <Image className="flow-doc-img" src="/flow/product.webp" alt="" width={640} height={771} sizes="(max-width: 760px) 40vw, 200px" priority={false} />
+          {layout.name === "tall" && (
+            <motion.span
+              className="flow-doc-label"
+              initial="hidden"
+              animate={state}
+              variants={{
+                hidden: reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.9 },
+                visible: { opacity: 1, y: 0, scale: 1, transition: { duration: reducedMotion ? 0.2 : 0.7, ease, delay: reducedMotion ? 0 : 1.15 } },
+              }}
+            >
+              <span>Perfect Product</span>
+            </motion.span>
+          )}
         </div>
       </motion.div>
 
-      <motion.p
-        className="flow-title"
-        style={place(layout.title.x, layout.title.y)}
-        initial="hidden"
-        animate={state}
-        variants={{
-          hidden: reducedMotion ? { opacity: 0 } : { opacity: 0, y: 18, filter: "blur(6px)" },
-          visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: reducedMotion ? 0.2 : 0.8, ease, delay: reducedMotion ? 0 : 1.15 } },
-        }}
-      >
-        Perfect Product
-      </motion.p>
+      {layout.name === "wide" && (
+        <motion.p
+          className="flow-title"
+          style={place(layout.title.x, layout.title.y)}
+          initial="hidden"
+          animate={state}
+          variants={{
+            hidden: reducedMotion ? { opacity: 0 } : { opacity: 0, y: 18, filter: "blur(6px)" },
+            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: reducedMotion ? 0.2 : 0.8, ease, delay: reducedMotion ? 0 : 1.15 } },
+          }}
+        >
+          Perfect Product
+        </motion.p>
+      )}
 
       {layout.outputs.map((item, index) => node(item, index, "dark"))}
     </div>

@@ -20,6 +20,9 @@ const bottomRow = [
   { slug: "figma", name: "Figma" },
 ] as const;
 
+// Phones: every tool in a single strip, alternating the two rows so wordmarks and icons mix.
+const allTools = topRow.flatMap((tool, i) => [tool, bottomRow[i]]);
+
 const logoDir = path.join(process.cwd(), "public", "tools");
 
 function findLogo(slug: string) {
@@ -35,9 +38,9 @@ const withLogos = (row: readonly { slug: string; name: string }[]): Tool[] =>
 // One looping strip. The track holds two copies of the list so the -50% loop is seamless; only
 // the first copy is announced. Each logo gets a fixed slot of at least a quarter of the strip
 // (see .tools-list li), which is what keeps the same logo from showing twice in a strip at once.
-function ToolsRow({ items, reverse = false }: { items: Tool[]; reverse?: boolean }) {
+function ToolsRow({ items, reverse = false, variant }: { items: Tool[]; reverse?: boolean; variant: "split" | "all" }) {
   return (
-    <div className={`tools-marquee${reverse ? " tools-marquee--reverse" : ""}`}>
+    <div className={`tools-marquee tools-marquee--${variant}${reverse ? " tools-marquee--reverse" : ""}`}>
       <div className="tools-track">
         {[0, 1].map((copy) => (
           <ul className="tools-list" aria-hidden={copy === 1} key={copy}>
@@ -62,10 +65,12 @@ export function ToolsMarquee() {
       <Reveal>
         <h2 className="tools-rail-title" id="tools-rail-title">Tools in Our Workflow</h2>
       </Reveal>
-      {/* Two strips with different tools, running in opposite directions. Focus pauses both. */}
+      {/* Desktop: two strips with different tools, running in opposite directions. Phones: one strip
+          with all ten (only one variant is displayed, see redesign.css). Focus pauses them. */}
       <div className="tools-band" tabIndex={0} aria-label="Tools in our workflow. Hover or focus to pause.">
-        <ToolsRow items={withLogos(topRow)} />
-        <ToolsRow items={withLogos(bottomRow)} reverse />
+        <ToolsRow items={withLogos(topRow)} variant="split" />
+        <ToolsRow items={withLogos(bottomRow)} variant="split" reverse />
+        <ToolsRow items={withLogos(allTools)} variant="all" />
       </div>
     </section>
   );
