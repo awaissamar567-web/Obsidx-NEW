@@ -277,27 +277,43 @@ export function MemberDock() {
     };
   }, [mode]);
 
-  // Phones and tablets (static mode): drag Obi anywhere with a finger or pen; a tap still opens /apply.
-  // Mouse input never starts a drag, so the desktop pet is unchanged.
+  // Static mode (phones, tablets, reduced motion): drag Obi anywhere with a finger, pen or mouse;
+  // a tap or click still opens /apply. The cursor-following desktop pet never runs this.
   useEffect(() => {
     const dock = dockRef.current;
     if (!dock || mode !== "static") return;
 
-    // Offset from the CSS resting spot in the bottom-right corner.
+    // Offset from the CSS resting spot in the bottom-right corner: the wanted one, and the one the
+    // transform currently shows (the rendered box minus `applied` is the resting box).
     const offset = { x: 0, y: 0 };
+    const applied = { x: 0, y: 0 };
     const start = { x: 0, y: 0, ox: 0, oy: 0 };
     let pointerId = -1;
     let moved = false;
     let landTimer = 0;
+    let pinned = false;
+
+    // The CSS rests Obi in the bottom-right corner (right/bottom), so the members label grows
+    // leftwards. Once dragged, pin it by left/top instead so the label opens to the right of
+    // wherever Obi was dropped.
+    const pin = () => {
+      if (pinned) return;
+      pinned = true;
+      const rect = dock.getBoundingClientRect();
+      dock.style.left = `${rect.left - applied.x}px`;
+      dock.style.top = `${rect.top - applied.y}px`;
+      dock.style.right = "auto";
+      dock.style.bottom = "auto";
+    };
 
     const place = () => {
-      // The untransformed box is the rendered box minus the current offset.
       const rect = dock.getBoundingClientRect();
-      const baseLeft = rect.left - offset.x;
-      const baseTop = rect.top - offset.y;
+      const baseLeft = rect.left - applied.x;
+      const baseTop = rect.top - applied.y;
       offset.x = Math.min(Math.max(offset.x, EDGE - baseLeft), window.innerWidth - EDGE - rect.width - baseLeft);
       offset.y = Math.min(Math.max(offset.y, EDGE - baseTop), window.innerHeight - EDGE - rect.height - baseTop);
       dock.style.transform = `translate3d(${offset.x.toFixed(1)}px, ${offset.y.toFixed(1)}px, 0)`;
+      Object.assign(applied, offset);
 
       const left = baseLeft + offset.x;
       const top = baseTop + offset.y;
@@ -309,10 +325,15 @@ export function MemberDock() {
     };
 
     const onDown = (event: PointerEvent) => {
-      if (event.pointerType === "mouse" || !event.isPrimary) return;
+      if (!event.isPrimary || event.button !== 0) return;
       pointerId = event.pointerId;
       Object.assign(start, { x: event.clientX, y: event.clientY, ox: offset.x, oy: offset.y });
       moved = false;
+      // Capture now, so a fast drag keeps reporting to Obi even once the pointer has left it
+      // (touch is captured by the browser already; a mouse is not).
+      try {
+        dock.setPointerCapture(pointerId);
+      } catch {}
     };
     const onMove = (event: PointerEvent) => {
       if (event.pointerId !== pointerId) return;
@@ -321,10 +342,7 @@ export function MemberDock() {
       if (!moved) {
         if (Math.hypot(dx, dy) < DRAG_START) return;
         moved = true;
-        // Touch is usually captured already; capture refusal is harmless, the drag still works.
-        try {
-          if (!dock.hasPointerCapture(pointerId)) dock.setPointerCapture(pointerId);
-        } catch {}
+        pin();
         setHover(null);
         setLanded(false);
         setCarried(true);
@@ -347,23 +365,36 @@ export function MemberDock() {
       landTimer = window.setTimeout(() => setLanded(false), 700);
     };
     const onResize = () => place();
+    // A long press would open the link menu instead of picking Obi up.
+    const onContextMenu = (event: Event) => event.preventDefault();
+    // Keep Obi on screen while the members label slides in and out (it changes the dock's width).
+    const sizeWatch = new ResizeObserver(() => {
+      if (pinned) place();
+    });
 
     place();
+    sizeWatch.observe(dock);
+    dock.addEventListener("contextmenu", onContextMenu);
     dock.addEventListener("pointerdown", onDown);
     dock.addEventListener("pointermove", onMove);
     dock.addEventListener("pointerup", onUp);
     dock.addEventListener("pointercancel", onUp);
+    // If the browser drops the pointer without a pointerup, still end the drag.
+    dock.addEventListener("lostpointercapture", onUp);
     window.addEventListener("resize", onResize);
 
     return () => {
       window.clearTimeout(landTimer);
+      sizeWatch.disconnect();
+      dock.removeEventListener("contextmenu", onContextMenu);
       dock.removeEventListener("pointerdown", onDown);
       dock.removeEventListener("pointermove", onMove);
       dock.removeEventListener("pointerup", onUp);
       dock.removeEventListener("pointercancel", onUp);
+      dock.removeEventListener("lostpointercapture", onUp);
       window.removeEventListener("resize", onResize);
       dock.style.transform = "";
-      dock.style.removeProperty("--bubble-room");
+      for (const prop of ["left", "top", "right", "bottom", "--bubble-room"]) dock.style.removeProperty(prop);
       setCarried(false);
     };
   }, [mode]);

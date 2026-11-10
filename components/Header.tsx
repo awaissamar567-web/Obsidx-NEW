@@ -5,16 +5,23 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 
-// Phone menu (hidden on desktop, see redesign.css). The Transparency section (#about) is left out
-// because it is hidden on phones.
+// Phone menu (hidden on desktop, see redesign.css): only the key sections, then the Apply button.
 const menuSections = [
-  { id: "home", label: "Home" },
-  { id: "opportunity", label: "The Opportunity" },
   { id: "what-we-build", label: "What We Build" },
   { id: "how-it-works", label: "How It Works" },
   { id: "what-we-do", label: "What We Do" },
-  { id: "results", label: "Partner Results" },
+  { id: "results", label: "Results" },
 ] as const;
+
+// The menu section the reader is in: the last one whose top has passed a third of the screen.
+function currentSection() {
+  let current: string | null = null;
+  for (const { id } of menuSections) {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= window.innerHeight / 3) current = id;
+  }
+  return current;
+}
 
 // Where a section's top edge lands when the menu scrolls to it: just enough room for the fixed
 // header to clear the heading (sections carry their own top padding).
@@ -23,6 +30,7 @@ const MENU_SCROLL_GAP = 56;
 export function Header() {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [current, setCurrent] = useState<string | null>(null);
   const previousY = useRef(0);
   const directionTravel = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
@@ -81,7 +89,7 @@ export function Header() {
     history.replaceState(null, "", `#${id}`);
     // A pixel target, so the sections' scroll-margin and the page's scroll-padding (made for
     // desktop anchor jumps) don't push the section further down.
-    const top = id === "home" ? 0 : Math.max(0, target.getBoundingClientRect().top + window.scrollY - MENU_SCROLL_GAP);
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - MENU_SCROLL_GAP);
     if (lenis) {
       lenis.scrollTo(top, { duration: 1.1, easing: (t: number) => 1 - Math.pow(1 - t, 4) });
     } else {
@@ -116,7 +124,10 @@ export function Header() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMenuOpen((open) => !open)}
+          onClick={() => {
+            if (!menuOpen) setCurrent(currentSection());
+            setMenuOpen((open) => !open);
+          }}
         >
           <span className="header-menu-icon" aria-hidden="true">
             <span />
@@ -145,8 +156,12 @@ export function Header() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: reduceMotion ? 0 : 0.04 + i * 0.035, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <a href={`#${section.id}`} onClick={(event) => goTo(event, section.id)}>
-                    <span className="mobile-menu-num">{String(i + 1).padStart(2, "0")}</span>
+                  <a
+                    href={`#${section.id}`}
+                    className={current === section.id ? "is-current" : undefined}
+                    aria-current={current === section.id ? "location" : undefined}
+                    onClick={(event) => goTo(event, section.id)}
+                  >
                     {section.label}
                   </a>
                 </motion.li>

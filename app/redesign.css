@@ -1205,52 +1205,49 @@ textarea,
     display: none;
   }
 
+  /* Just the white glyph: no border, no fill. */
   .header-menu-button {
     display: grid;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     place-items: center;
     padding: 0;
-    border: 1px solid rgba(255, 213, 142, 0.3);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--gold-light);
-    transition: background 0.2s ease, border-color 0.2s ease;
+    border: 0;
+    background: transparent;
+    color: #fff;
   }
 
-  .is-menu-open .header-menu-button {
-    border-color: rgba(255, 213, 142, 0.6);
-    background: rgba(252, 186, 75, 0.1);
+  .header-menu-button:focus {
+    outline: none;
   }
 
-  .header-menu-button:focus-visible {
-    outline: 2px solid var(--gold-light);
-    outline-offset: 2px;
+  .header-menu-button:focus-visible .header-menu-icon {
+    filter: drop-shadow(0 0 6px rgba(255, 213, 142, 0.9));
   }
 
   .header-menu-icon {
     position: relative;
     display: block;
-    width: 18px;
-    height: 12px;
+    width: 20px;
+    height: 14px;
   }
 
   .header-menu-icon span {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 1.8px;
+    height: 2px;
     border-radius: 2px;
     background: currentColor;
     transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   }
 
   .header-menu-icon span:nth-child(1) { top: 0; }
-  .header-menu-icon span:nth-child(2) { top: 5px; }
-  .header-menu-icon span:nth-child(3) { top: 10px; }
+  .header-menu-icon span:nth-child(2) { top: 6px; }
+  .header-menu-icon span:nth-child(3) { top: 12px; }
 
   .is-menu-open .header-menu-icon span:nth-child(1) {
-    top: 5px;
+    top: 6px;
     transform: rotate(45deg);
   }
 
@@ -1259,22 +1256,23 @@ textarea,
   }
 
   .is-menu-open .header-menu-icon span:nth-child(3) {
-    top: 5px;
+    top: 6px;
     transform: rotate(-45deg);
   }
 
+  /* Open menu: a dark card with low rounded corners, plain rows and the Apply button. */
   .mobile-menu {
     position: absolute;
-    top: calc(100% + 0.6rem);
+    top: calc(100% + 0.55rem);
     right: 0;
     left: 0;
     display: block;
-    padding: 0.5rem;
-    border: 1px solid rgba(255, 213, 142, 0.14);
-    border-radius: 24px;
-    background: #0d0c0a;
+    padding: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 18px;
+    background: linear-gradient(180deg, #171612 0%, #0f0e0c 100%);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
-    transform-origin: top right;
+    transform-origin: top center;
   }
 
   .mobile-menu ul {
@@ -1283,46 +1281,33 @@ textarea,
     list-style: none;
   }
 
-  .mobile-menu li + li {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
   .mobile-menu li a {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    padding: 0.85rem 0.9rem;
-    border-radius: 14px;
-    color: var(--ink);
+    display: block;
+    padding: 0.8rem 0.85rem;
+    border-radius: 11px;
+    color: #ece8e1;
     font-family: var(--display);
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 500;
     letter-spacing: -0.01em;
     transition: background 0.2s ease, color 0.2s ease;
   }
 
+  .mobile-menu li a.is-current,
   .mobile-menu li a:active,
   .mobile-menu li a:focus-visible {
-    background: rgba(252, 186, 75, 0.08);
-    color: var(--gold-light);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
     outline: none;
-  }
-
-  .mobile-menu-num {
-    min-width: 1.4rem;
-    color: var(--gold);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
   }
 
   .mobile-menu .mobile-menu-apply {
     display: flex;
     width: 100%;
-    min-height: 54px;
-    margin-top: 0.5rem;
-    border-radius: 14px;
-    font-size: 0.95rem;
+    min-height: 50px;
+    margin-top: 0.45rem;
+    border-radius: 12px;
+    font-size: 0.92rem;
   }
 
   /* Tools: one strip with all ten logos instead of two. Ten slots of a third of the strip take
@@ -1467,34 +1452,36 @@ textarea,
     }
   }
 
-  /* Obi on phones: dragged with a finger (MemberDock.tsx). */
-  .member-dock--static {
-    touch-action: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
+}
 
-  .member-dock--static .pet-bubble {
-    max-width: min(240px, calc(100vw - 2.5rem), var(--bubble-room, 240px));
-  }
+/* Obi in the corner (static mode: phones, tablets, reduced motion) can be dragged anywhere
+   (MemberDock.tsx). The cursor-following desktop pet never gets the --static class. */
+.member-dock--static {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
 
-  .member-dock.is-below .pet-bubble {
-    top: calc(100% + 10px);
-    bottom: auto;
-    border-radius: 4px 16px 16px 16px;
-    transform-origin: top left;
-  }
+.member-dock--static .pet-bubble {
+  max-width: min(240px, calc(100vw - 2.5rem), var(--bubble-room, 240px));
+}
 
-  .member-dock.is-below.is-flipped .pet-bubble {
-    border-radius: 16px 4px 16px 16px;
-    transform-origin: top right;
-  }
+.member-dock.is-below .pet-bubble {
+  top: calc(100% + 10px);
+  bottom: auto;
+  border-radius: 4px 16px 16px 16px;
+  transform-origin: top left;
+}
 
-  .member-dock.is-carried .pet-sprite {
-    scale: 1.12;
-    filter: drop-shadow(0 0 1px rgba(255, 231, 174, 0.55)) drop-shadow(0 16px 18px rgba(0, 0, 0, 0.6));
-  }
+.member-dock.is-below.is-flipped .pet-bubble {
+  border-radius: 16px 4px 16px 16px;
+  transform-origin: top right;
+}
+
+.member-dock.is-carried .pet-sprite {
+  scale: 1.12;
+  filter: drop-shadow(0 0 1px rgba(255, 231, 174, 0.55)) drop-shadow(0 16px 18px rgba(0, 0, 0, 0.6));
 }
 
 @keyframes ox-shine {
