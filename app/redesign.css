@@ -1504,34 +1504,40 @@ textarea,
   border-top: 1px solid var(--line);
 }
 
-.site-footer-legal p {
-  margin: 0;
-  color: var(--dim);
-  font-size: 0.85rem;
-}
-
 .site-footer-legal nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
 }
 
+/* Italic Inter in a light-to-mid grey gradient; links turn plain white on hover. */
+.site-footer-legal p,
 .site-footer-legal a {
-  color: var(--muted);
+  margin: 0;
+  background: linear-gradient(100deg, #f4f4f4 0%, #c6c6c6 45%, #8e8e8e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--body);
   font-size: 0.85rem;
+  font-style: italic;
+  font-weight: 400;
   transition: color 0.2s ease;
 }
 
 .site-footer-legal a:hover,
 .site-footer-legal a:focus-visible {
-  color: var(--gold-light);
+  color: #fff;
 }
 
-/* ---------- Legal pages (/privacy, /terms): one reading column ---------- */
+/* ---------- Legal pages (/privacy, /terms): one reading column ----------
+   White text only and plain Inter throughout (no gold, no display or serif faces). */
 .legal {
   width: min(calc(100% - 2.5rem), 46rem);
   margin: 0 auto;
   padding: clamp(8.5rem, 14vw, 11rem) 0 clamp(4rem, 8vw, 6.5rem);
+  color: #fff;
+  font-family: var(--body);
 }
 
 .legal-head {
@@ -1541,29 +1547,31 @@ textarea,
 
 .legal-head .ox-eyebrow {
   margin-bottom: 1rem;
+  color: #fff;
+  font-family: var(--body);
+  font-weight: 500;
 }
 
-/* Editorial serif title, as on the hero guideline (Apple Garamond italic). */
 .legal-head h1 {
   margin: 0;
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(2.9rem, 7vw, 4.75rem);
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1;
+  color: #fff;
+  font-family: var(--body);
+  font-size: clamp(2.4rem, 6vw, 3.75rem);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .legal-updated {
-  margin: 1.4rem 0 0;
-  color: var(--dim);
+  margin: 1.1rem 0 0;
+  color: #fff;
   font-size: 0.85rem;
 }
 
 .legal p,
 .legal li {
-  color: #c8c4bc;
+  color: #fff;
   font-size: 1rem;
   line-height: 1.75;
 }
@@ -1573,7 +1581,6 @@ textarea,
 }
 
 .legal-intro p {
-  color: var(--ink);
   font-size: 1.08rem;
 }
 
@@ -1585,23 +1592,19 @@ textarea,
 
 .legal-section h2 {
   margin: 0 0 1rem;
-  color: var(--ink);
-  font-family: var(--display);
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
-  font-style: italic;
+  color: #fff;
+  font-family: var(--body);
+  font-size: clamp(1.2rem, 2.1vw, 1.4rem);
+  font-style: normal;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.legal-num {
-  color: var(--gold);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 }
 
 .legal-section h3 {
   margin: 1.5rem 0 0.5rem;
-  color: var(--ink);
-  font-family: var(--display);
+  color: #fff;
+  font-family: var(--body);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -1617,7 +1620,7 @@ textarea,
   list-style: none;
 }
 
-/* Gold rounded-square bullets, matching the What We Do markers. */
+/* Small white rounded-square bullets. */
 .legal li {
   position: relative;
   margin-bottom: 0.55rem;
@@ -1631,26 +1634,26 @@ textarea,
   width: 6px;
   height: 6px;
   border-radius: 2px;
-  background: var(--gold);
+  background: #fff;
   content: "";
 }
 
 .legal strong {
-  color: var(--ink);
+  color: #fff;
   font-weight: 600;
 }
 
 .legal a {
-  color: var(--gold-light);
+  color: #fff;
   text-decoration: underline;
-  text-decoration-color: rgba(255, 213, 142, 0.4);
+  text-decoration-color: rgba(255, 255, 255, 0.45);
   text-underline-offset: 3px;
   transition: text-decoration-color 0.2s ease;
 }
 
 .legal a:hover,
 .legal a:focus-visible {
-  text-decoration-color: var(--gold-light);
+  text-decoration-color: #fff;
 }
 
 /* ---------- 404: the site header, then "404 | This page could not be found." centred ---------- */
