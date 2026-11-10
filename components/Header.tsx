@@ -79,14 +79,18 @@ export function Header() {
   }, [menuOpen]);
 
   // Menu link: close the menu, then glide to the section (Lenis when it runs, native otherwise).
+  // On other pages (/privacy, /terms, 404) the section isn't here, so the link opens /#section.
   const goTo = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
     const target = document.getElementById(id);
-    if (!target) return;
+    if (!target) {
+      setMenuOpen(false);
+      return;
+    }
     event.preventDefault();
     // Lenis also handles hash-link clicks on window; stop it so this scroll is the only one.
     event.stopPropagation();
     setMenuOpen(false);
-    history.replaceState(null, "", `#${id}`);
+    history.replaceState(null, "", `/#${id}`);
     // A pixel target, so the sections' scroll-margin and the page's scroll-padding (made for
     // desktop anchor jumps) don't push the section further down.
     const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - MENU_SCROLL_GAP);
@@ -157,7 +161,7 @@ export function Header() {
                   transition={{ duration: 0.3, delay: reduceMotion ? 0 : 0.04 + i * 0.035, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <a
-                    href={`#${section.id}`}
+                    href={`/#${section.id}`}
                     className={current === section.id ? "is-current" : undefined}
                     aria-current={current === section.id ? "location" : undefined}
                     onClick={(event) => goTo(event, section.id)}
